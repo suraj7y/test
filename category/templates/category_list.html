@@ -1,0 +1,16 @@
+{% for item in category_data %}
+<tr>
+     <th scope="row">{{ forloop.counter }}</th>
+    <td>{{item.category_name}}</td>
+    <td>{{item.category_description}}</td>
+    <td>{{item.category_parent_id}}</td>
+    <td>
+        <div class="action-area">
+            <a href="#"><i id="category_edit" onclick="set_modal_id({{item.id}})" class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></a>
+            <a href="#"><i id="category_delete" onclick="delete_category({{item.id}})" class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
+            <!-- <a href="#"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
+            <a href="#"><i class="fa fa-plus fa-lg" aria-hidden="true"></i></a>-->
+        </div>
+    </td>
+</tr>
+{% endfor %}

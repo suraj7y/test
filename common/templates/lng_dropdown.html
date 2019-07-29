@@ -1,0 +1,11 @@
+<option value=""><i class="flag-icon flag-icon-gb"></i> Select</option>
+{% for obj in languages %}
+<option lng_mode="{{ obj.writing_mode }}" {% if request.session.cu_language == obj.language_code %} selected {% endif %}  value="{{ obj.language_code }}" ><i class="flag-icon flag-icon-gb"></i> {{ obj.language_name }}</option>
+{% endfor %}
+
+<script>
+      $(document).ready(function(){
+            var w_mode = $('select#dropdown-flag option:selected').attr('lng_mode');
+            //alert(w_mode);
+      });
+</script>

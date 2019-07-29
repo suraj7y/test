@@ -1,0 +1,1325 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block card %}
+
+
+<style>
+    .text{
+        padding-left: 12px;
+    font-size: 12px;
+    line-height: 18px;}
+</style>
+<style>
+
+	.dataTables_scrollHeadInner{
+	width:100% !important;
+
+	}
+    .table{
+    width:100% !important;
+    }
+    .dataTables_scroll .dataTables_scrollHead{display:none;}
+    .dataTables_scroll .dataTables_scrollBody thead tr{height:25px !important;}
+    .dataTables_scroll .dataTables_scrollBody thead tr th{height:25px !important;}
+    .dataTables_scroll .dataTables_scrollBody thead tr th div{height:25px !important;padding-top:6px;}
+    table#address_master_table tbody td {
+    padding-top: 4px !important;
+    padding-bottom: 4px;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+</style>
+<style>
+.attritem {
+	list-style:none;cursor:pointer;
+
+}
+.topup-parent { position:relative;}
+.attr-area {
+position:absolute;
+z-index:1000;
+
+}
+.attr-area ul {
+	width: 159px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-top: 0px;
+    margin-left: 0px;
+    padding-left: 0px;
+}
+.attr-area li {
+	border-bottom: 1px solid #eee;
+    color: #000;
+    padding: 2px 6px;
+    font-size: 12px;
+}
+
+.remove { color:red;}
+.append{ color:red;}
+</style>
+
+<!---------------------------------contant area----------------------------->
+
+
+        <div class="app-content content container-fluid bg-content">
+          <div class="content-wrapper">
+            <div class="content-header row">
+              <div class="col-md-6 col-xs-6 mb-1 cont-head ">
+                <h2>Product Bank {{pro_count}}  {{plan_data.id}} {{plan_data.number_of_product}}
+                    {{plan_data.number_of_product_val}}
+                    {{plan_data.number_of_image_per_product}}
+                    {{plan_data.number_of_image_per_product_val}}
+
+                </h2>
+              </div>
+              <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-xs-6">
+                <div class="breadcrumb-wrapper col-xs-12">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">Product Bank </li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+            <div class="content-body "><!-- stats -->
+              <section class="card mb-10 categ-add">
+                <div class="row w-22">
+                 <div class="col-lg-12">
+
+              <div class="col-md-3">
+                    <div class="form-group">
+                      <select id="searchby" name="searchby" class="form-control">
+                        <option value="none">All</option>
+                        <option value="name">Name</option>
+                        <option value="category">Category</option>
+                        <option value="boname">BO Name</option>
+                        <option value="status">Status</option>
+
+                       </select>
+                    </div>
+                  </div>
+<div class="col-md-5">
+               <div class="col-md-10" id="name_div" style="display:none;">
+                    <div class="form-group">
+                      <input type="text" name="proname" id="proname" class="form-control" placeholder="Enter Product Name" />
+                    </div>
+               </div>
+
+
+              <div class="col-md-10" id="category_div" style="display:none;">
+                    <div class="form-group">
+                      <select name="procategory" id="procategory" class="form-control">
+                             <option value="">Select Category</option>
+                                {% for category in category %}
+                                <option value="{{category.id}}" data-tokens="{{category.id}}">{{category.category_display}}</option>
+                                {% endfor %}
+
+                        </select>
+                    </div>
+               </div>
+
+              <div class="col-md-10" id="bo_div" style="display:none;">
+                    <div class="form-group">
+                      <select class="form-control selectpicker" id="probo" name="probo" data-live-search="true">
+                        <option >Select BO</option>
+                        {% for bo_data in bo_data %}
+                        <option value="{{bo_data.bo_id}}" data-tokens="{{bo_data.bo_id}}">{{bo_data.bo_email}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+               </div>
+
+
+
+              <div class="col-md-10" id="status_div" style="display:none;">
+                    <div class="form-group">
+                       <select id="prostatus" name="prostatus" class="form-control">
+                        <option value="">Select Status</option>
+                        <option value="0">Publish</option>
+                        <option value="1">Unpublish</option>
+                       </select>
+                    </div>
+               </div>
+
+
+              <div class="col-md-2" id="submit_div" style="display:none;">
+                    <div class="form-group">
+                        <button type="button" id="filterbtn" class="btn btn-success"  >Search</button>
+                    </div>
+               </div>
+
+</div>
+              <div class="col-md-4">
+                  <div class="form-group addr-a-btn">
+                      {% if pro_count < plan_data.number_of_product %}
+
+                      <i id="open_modal" onclick="confirm('You can not add product upgrade your plan.')"  class="fa fa-plus-circle fa-2x" title="Add New" aria-hidden="true"></i>
+                        {% else %}
+                      <i id="open_modal" onclick="open_modal('productmodal')"   class="fa fa-plus-circle fa-2x" title="Add New" aria-hidden="true"></i>
+                       {% endif %}
+
+                  </div>
+              </div>
+          </div>
+
+
+              </div>
+            </section>
+
+
+
+
+
+            <section class="card mb-0">
+              <div class="row ">
+                <div class="col-lg-12">
+
+                            <table class="table mb-0" id="product_list">
+                              <thead class="table-head ">
+                                <tr>
+                                  <th>Sr. No.</th>
+                                  <th>Item code</th>
+                                  <th>Product name</th>
+                                  <th>Image</th>
+                                  <th>Category</th>
+                                  <th>Online Qty</th>
+                                  <th>Offline Qty</th>
+                                  <th>price</th>
+                                  <th>Currency</th>
+                                  <th>Vat</th>
+                                  <th>BO Name</th>
+                                  <th>Created on</th>
+                                  <th>Status</th>
+                                  <th>Action</th>
+                                </tr>
+                              </thead>
+                              <tbody></tbody>
+                          </table>
+
+              </div>
+
+
+
+
+          </div>
+        </section>
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <!---------------------------------contant area end---------------------------->
+
+
+{% endblock %}
+
+
+{% block jsbody %}
+<!--------popup--modal--------------------------------------------------->
+
+    <div class="modal fade text-xs-left" id="productmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
+      <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+          <div class="modal-header popup-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <label class="modal-title model-head">
+              <h4>Add New Product</h4>
+            </label>
+          </div>
+
+          <div class="modal-body tab-area step-area">
+            <form role="form" name="add_product_form" id="add_product_form" method="POST" enctype="multipart/form-data">{%csrf_token%}
+
+
+
+              <div class="col-xl-12 col-lg-12 padd0 tab_sections"  id="Individual" >
+                <ul class="nav nav-tabs">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="base-tab1" data-toggle="tab" aria-controls="tab1" href="#tab1" aria-expanded="true">Product Detail</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="base-tab2" data-toggle="tab" aria-controls="tab2" href="#tab2" aria-expanded="false">Filter </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="base-tab3" data-toggle="tab" aria-controls="tab3" href="#tab3" aria-expanded="false">Product image </a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a class="nav-link" id="base-tab4" data-toggle="tab" aria-controls="tab4" href="#tab4" aria-expanded="false">Product details </a>
+                  </li>
+
+                </ul>
+
+                <div class="tab-content px-1 pt-1">
+                  <div role="tabpanel" class="tab-pane active" id="tab1" aria-expanded="true" aria-labelledby="base-tab1">
+                    <div class="col-lg-12 padd0">
+
+                      <div class="form-body" style="overflow: inherit;">
+
+                        <div class="row">
+                        <!--div class="col-md-12  padd0  un-add-logo-main">
+                        <div class="col-md-2  un-add-logo">
+                         <img id="blah" src="img/d-img.jpg" alt="your image">
+                       </div>
+                        <div class="col-md-10 um-add-file">
+                          <input type="file" onchange="readURL(this);">
+                        </div>
+                      </div-->
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="pro_name">Product Name</label>
+                          <input type="text" id="pro_name" name="pro_name"  class="form-control item_required" placeholder=" Product Name" >
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="pcode">Item Code</label>
+                          <input type="text"  id="pcode" name="pcode" class="form-control item_required" placeholder="Item Code" >
+                        </div>
+                      </div>
+
+
+
+
+
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="pro_price">Regular Price</label>
+                          <input type="number" name="pro_price" id="pro_price"  class="form-control item_required" placeholder="Regular Price" >
+                        </div>
+                      </div>
+
+                            <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="pro_price">Currency</label>
+                            <select name="pro_price_ciurrency" id="pro_price_ciurrency" class="form-control selectpicker item_required" data-live-search="true">
+                             <option value="">Select Currency</option>
+                                {% for currency_data in currency_data %}
+                                <option value="{{currency_data.id}}" data-tokens="{{currency_data.id}}">{{currency_data.currency_code}}</option>
+                                {% endfor %}
+
+                            </select>
+                        </div>
+                      </div>
+
+                         <div class="col-md-12 padd0">
+
+                            <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="online_pro_qty">Online Qty</label>
+                              <input type="number" min="0" id="online_pro_qty" name="online_pro_qty"  class="form-control item_required" placeholder="Current Quantity" >
+                            </div>
+                          </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                  <label for="offline_pro_qty">Offline Qty</label>
+                                  <input type="number" min="0" id="offline_pro_qty" name="offline_pro_qty"  class="form-control item_required" placeholder="Current Quantity" >
+                                </div>
+                            </div>
+                         </div>
+
+
+                            <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="pro_vat">VAT</label>
+                          <input type="number" name="pro_vat" id="pro_vat"  class="form-control" placeholder=" VAT" >
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <label for="pro_bo">Select BO</label>
+                        <select class="form-control selectpicker item_required" id="pro_bo" name="pro_bo" data-live-search="true">
+                        <option value="">Select BO</option>
+                        {% for bo_data in bo_data %}
+                        <option value="{{bo_data.bo_id}}" data-tokens="{{bo_data.bo_id}}">{{bo_data.bo_email}}</option>
+                        {% endfor %}
+                        </select>
+
+                      </div>
+                        </div>
+                  </div>
+
+
+
+                </div>
+
+              </div>
+              <div class="tab-pane" id="tab2" aria-labelledby="base-tab2">
+
+                <div class="col-lg-12 padd0">
+
+                  <div class="form-body" style="overflow: inherit;">
+
+                    <div class="row">
+
+                        <div class="col-md-12 padd0 mb-10">
+                            <label for="pro_cat" class="form-control-label">Category</label>
+                            <select class="form-control selectpicker item_required" id="pro_cat" name="pro_cat" data-live-search="true">
+                                <option value="">Select Category</option>
+                                {% for category in category %}
+                                <option value="{{category.id}}" data-tokens="{{category.id}}">{{category.category_display}}</option>
+                                {% endfor %}
+                            </select>
+
+                          </div>
+
+                        <div class="col-md-12 padd0">
+                            <div class="col-md-12 padd0" id="appnedrow" style="display:none;">
+                                <div class="col-md-12">
+                                    <div style="text-align:right;" class="form-group addr-a-time append"><i style="color:#000; font-size:22px; " title="Add more attribute " class="fa fa-plus-circle" aria-hidden="true"></i></div>
+                                  </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12 padd0">
+                            <table class="table" id="edit_attr">
+
+                                <tr class="attr-row">
+
+                                    <td class="last" colspan="2">
+                                    <div class="topup-parent">
+                                    <input type="text" autocomplete="off" class="input1 pro_attr" id="" name="pro_attr[]"  Placeholder="Product Atribute" value="" />&nbsp;
+                                        <span class="attr-val-span"></span>
+                                    <input type="text" class="input1" id="" name="attr_qty[]"  Placeholder="Quantity" value="" />&nbsp;
+                                        <span style="cursor:pointer;" class="append"><strong>Add more attribute</strong></span>
+                                    <div class="attr-area"></div>
+                                    <input type="hidden" class="pro_attr_id" name="pro_attr_id[]" value="" />
+                                    </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+
+
+
+                  <div class="tab-pane" id="tab3" aria-labelledby="base-tab3">
+               <div class="col-lg-12 padd0">
+                <div class="form-body" style="overflow: inherit;">
+                  <div class="row">
+
+                    <div class="col-md-12  ">
+
+                      <div class="col-md-12 add-area">
+                          <div class="col-md-12" style="text-align: center; margin-bottom:10px;">
+                                 <img src="/static/img/image_upload.png" width="45" onclick="add_img()" aria-hidden="true">
+                             </div>
+                        <!--input type="file" name="pro_image[]" id="pro_img" class="pro_images item_required" multiple /-->
+                          <div class="col-md-12">
+                                 <div class="col-md-10" id="image_tr"></div>
+                             </div>
+
+                             <div class="form-group">
+                                 <div class="col-lg-12" id="image_preview"></div>
+                             </div>
+
+                        <input type="hidden" name="pro_per_image" id="pro_per_img" value="{{plan_data.number_of_image_per_product_val}}" />
+                        <input type="hidden" name="edit_pro_per_image" id="edit_pro_per_image" value="" />
+
+                      </div>
+
+
+                    </div>
+
+
+                  </div>
+                </div>
+
+              </div>
+
+
+
+            </div>
+
+                  <div class="tab-pane" id="tab4" aria-labelledby="base-tab4">
+                 <div class="col-lg-12 padd0">
+                    <div class="form-body">
+
+
+
+                    <div class="row">
+
+
+                       <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="pro_shipping_price">Shipping Price</label>
+                          <input type="number" id="pro_shipping_price" name="pro_shipping_price"  class="form-control" placeholder="Shipping price" >
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="pro_exchange_period">Exchange Offer</label>
+                          <select class="form-control selectpicker" id="pro_exchange_period" name="pro_exchange_period" data-live-search="true">
+                          <option data-tokens="china">10 days</option>
+                          <option data-tokens="china">15 days </option>
+                          <option data-tokens="china">20 days</option>
+                          <option data-tokens="china">30 days</option>
+                          <option data-tokens="china">No Exchange</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                        <div class="row">
+
+
+                     <div class="col-md-6">
+                      <div class="form-group form-check" style="padding-left: 20px;">
+                           <input type="checkbox" class="form-check-input" id="pro_featured" name="pro_featured" value="True">
+                           <label class="form-check-label padd0" for="pro_featured">Featured Product</label>
+                       </div>
+                      </div>
+
+                      <div class="col-md-6">
+                      <div class="form-group form-check" style="padding-left: 15px;">
+                           <input type="checkbox" class="form-check-input" id="pro_cod" name="pro_cod" value="True">
+                           <label class="form-check-label padd0" for="pro_cod">Cash On Delivery</label>
+                       </div>
+                      </div>
+                    </div>
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label for="pro_details">Product Details</label>
+                                <textarea class="form-control item_required" id="pro_details" name="pro_details" placeholder="Enter Product Details"></textarea>
+
+                              </div>
+                            </div>
+
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label for="pro_specification">Product Specifications</label>
+                                <textarea class="form-control" id="pro_specification" name="pro_specification" placeholder="Enter Product Specifications"></textarea>
+                                <input type="hidden" name="proid" id="proid" value=""/>
+
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+              </div>
+
+          </div>
+        </div>
+
+
+      </form>
+
+
+    </div>
+
+    <div class="modal-footer">
+      <div class="col-md-12 form-group ">
+       <input type="button" id="add_product" class="btn btn  btn-md po-save-btn" value="Save">
+       <input type="reset" class="btn btn-md po-close-btn" data-dismiss="modal" value="Close">
+
+     </div>
+
+   </div>
+
+
+ </div>
+</div>
+</div>
+
+
+
+<!---------------------- popup--modal---------------------------->
+
+<!--------active --modal--------------------------------------------------->
+
+<div class="modal fade text-xs-left" id="quantity" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header popup-header ">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <label class="modal-title model-head">
+          <h4>Current quantity</h4>
+        </label>
+      </div>
+
+      <div class="modal-body tab-area activate-area-mp">
+        <div class="row ">
+                        <div class="col-lg-12">
+                          <div class="table-responsive">
+                            <table class="table mb-0">
+                              <thead class="table-head ">
+                                <tr>
+                                  <th>Sr. No.</th>
+                                  <th>Date</th>
+                                  <th>Quantity of product added</th>
+                                  <th>Quantity of product sold</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td scope="row">1</td>
+                                  <td>11/06/2019</td>
+                                  <td><span >10</span></td>
+                                  <td>20</td>
+                                </tr>
+                                <tr>
+                                  <td scope="row">2</td>
+                                  <td>11/06/2019</td>
+                                  <td><span >10</span></td>
+                                  <td>20</td>
+                                </tr>
+
+                                <tr>
+                                  <td scope="row">3</td>
+                                  <td>11/06/2019</td>
+                                  <td><span >10</span></td>
+                                  <td>20</td>
+                                </tr>
+                              </tbody>
+                            </table>
+
+                          </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                          <div class="col-md-12">
+                         <nav aria-label="Page navigation example">
+                          <ul class="pagination">
+                            <li class="page-item"><a class="page-link next-link" href="#">Previous</a></li>
+                            <li class="page-item"><a class="page-link next-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link next-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link next-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link next-link" href="#">Next</a></li>
+                          </ul>
+                        </nav>
+                        </div>
+                      </div>
+
+
+
+                      </div>
+
+
+      </div>
+
+
+
+</div>
+</div>
+</div>
+
+
+
+<!---------------------- popup--modal---------------------------->
+
+
+<!--------active --modal--------------------------------------------------->
+
+<div class="modal fade text-xs-left" id="regularprice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header popup-header ">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <label class="modal-title model-head">
+          <h4>Regular Price</h4>
+        </label>
+      </div>
+
+      <div class="modal-body tab-area activate-area-mp">
+        <div class="row ">
+                        <div class="col-lg-12">
+                          <div class="table-responsive">
+                            <table class="table mb-0">
+                              <thead class="table-head ">
+                                <tr>
+                                  <th>Sr. No.</th>
+                                  <th>Date</th>
+                                  <th>Regular Price</th>
+                                  <th>Special Price</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td scope="row">1</td>
+                                  <td>11/06/2019</td>
+                                  <td>50 SAR</td>
+                                  <td>45 SAR</td>
+                                </tr>
+                                 <tr>
+                                  <td scope="row">1</td>
+                                  <td>11/06/2019</td>
+                                  <td>50 SAR</td>
+                                  <td>45 SAR</td>
+                                </tr>
+
+                                 <tr>
+                                  <td scope="row">1</td>
+                                  <td>11/06/2019</td>
+                                  <td>50 SAR</td>
+                                  <td>45 SAR</td>
+                                </tr>
+                              </tbody>
+                            </table>
+
+                          </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                          <div class="col-md-12">
+                         <nav aria-label="Page navigation example">
+                          <ul class="pagination">
+                            <li class="page-item"><a class="page-link next-link" href="#">Previous</a></li>
+                            <li class="page-item"><a class="page-link next-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link next-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link next-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link next-link" href="#">Next</a></li>
+                          </ul>
+                        </nav>
+                        </div>
+                      </div>
+                      </div>
+                  </div>
+                </div>
+                </div>
+                </div>
+
+
+
+<!---------------------- popup--modal---------------------------->
+
+<style>
+    .padd-l-0{
+        padding-left: 0px;
+        }
+        .addr-a-time {
+    text-align: left;
+    padding-top: 5px;
+}
+
+</style>
+
+<script>
+var j = 1;
+    function open_modal(modalid)
+    {
+        $("#add_product_form").trigger("reset");
+        $("#attrname").empty();
+        $("#attrvalue").empty();
+        $("#attrqty").empty();
+        $("#image_preview").empty();
+        $("#appnedrow").hide();
+        $("#edit_attr").empty();
+        $("#pro_cat").val('');
+        $("#pro_cat").selectpicker("refresh");
+         var tr_html = '<tr class="attr-row"><td class="last"><div class="topup-parent">';
+         tr_html +='<div class="col-md-4 padd-l-0"><input type="text" autocomplete="off" class="form-control input1 pro_attr" id="" name="pro_attr[]"  Placeholder="Product Atribute" value="" /></div>';
+         tr_html += '<div class="col-md-3 padd-l-0"><span class="attr-val-span"></span></div>';
+         tr_html += '<div class="col-md-3 padd-l-0"><input type="text" class="form-control input1" id="" name="attr_qty[]"  Placeholder="Quantity" value="" /></div>';
+         tr_html += '<div class="col-md-2 padd-l-0"><span style="cursor:pointer;" class="append"><div class="form-group addr-a-time"><i style="color:#000; font-size:22px;" class="fa fa-plus-circle" aria-hidden="true"></i></div></span></div>';
+         tr_html += '<div class="attr-area"></div>';
+         tr_html += '<input type="hidden" class="pro_attr_id" name="pro_attr_id[]" value="" />';
+         tr_html += '</div></td></tr>';
+         $("#edit_attr").html(tr_html);
+
+        $("#"+modalid).modal("show");
+    }
+
+    function add_img()
+    {
+        $('#image_tr').html('');
+        $('#image_preview').html('');
+        var html = '<td id="img_td"><input type="file" multiple style="display: none;" name="upload_files[]" id="upload_files" onchange="preview_image()" /></td>';
+        $('#image_tr').append(html);
+        $("#upload_files").click();
+        j++;
+    }
+
+
+    function preview_image()
+    {
+        var total_file=document.getElementById("upload_files").files.length;
+
+        var deleted_file_ids = [];
+        for(var i=0;i<total_file;i++)
+        {
+            var img_html ='<div class="col-md-2 form-upload-add" id="img_show_div'+j+'" style="text-align:center;"><input type="checkbox" id="featured_img'+j+'" onclick="featured_img_check(this.id)" name="featured_img[]" value="True"><img id="blah" src="'+URL.createObjectURL(event.target.files[i])+'"><a href="#" onclick="del_pic('+j+')">Delete</a></div>';
+            $('#image_preview').append(img_html);
+            //j++;
+        }
+    }
+
+    function del_pic(keyid)
+    {
+        $('#img_show_div'+keyid).remove();
+        //$(this).remove();
+    }
+
+
+    function featured_img_check(keyid)
+    {
+        var byName = document.getElementsByName('featured_img[]');
+
+        for (var k = 0; k <byName.length; k++)
+        {
+            var is_checked = $('#'+byName[k].id).prop("checked");
+            if((is_checked == true) & (byName[k].id != keyid))
+			{
+			    $('#'+byName[k].id).prop("checked", false);
+			}
+	    }
+    }
+
+    function make_false_checkbox()
+    {
+	  	$("#add_product_form input:checkbox").each(function()
+	  	{
+			if($(this).prop("checked")!=true){
+			  $(this).val("False");
+			  $(this).prop("checked", true);
+			}
+	  	});
+	}
+
+
+    var i = 1;
+
+    $(document).ready(function(){
+
+                           //var tables = $('#product_list').DataTable();
+                           //tables.destroy();
+                           $('#product_list').DataTable({
+                           "processing": true,
+                           "scrollX": true,
+                           "searching":false,
+                           "bLengthChange": false,
+                           "pageLength" : 2,
+                           "serverSide": true,
+                           "ordering": false,
+                           "ajax": {
+                               "url": "/product/get_product_list/",
+                               "data": function ( d )
+                               {
+                                    d.search=$("#searchby").val();
+                                    d.proname=$("#proname").val();
+                                    d.procategory=$("#procategory").val();
+                                    d.probo=$("#probo").val();
+                                    d.prostatus=$("#prostatus").val();
+                               }
+                           }
+
+                           });
+
+
+
+
+
+        $(document).on('click','#add_product',function(e)
+        {
+                    e.preventDefault();
+                    make_false_checkbox();
+                    var form_data = new FormData($("#add_product_form")[0]);
+                    var pro_per_image = $("#pro_per_image").val();
+                    var edit_pro_per_image = $("#edit_pro_per_image").val();
+                    var files = $("#upload_files")[0].files;
+                    var v = files.length;
+
+                    var emptyFlag = 0;
+                    var firstError = 0;
+
+                    emptyFlag = checkMandatoryField('item_required');
+
+                    if(emptyFlag == 0)
+                    {
+
+                                $.ajax({
+                                url:'/product/addproduct/',
+                                type:'POST',
+                                data:form_data,
+                                cache:false,
+                                contentType: false,
+                                processData: false,
+                                success: function(result){
+                                    Swal.fire(
+                                            'Success!',
+                                             result,
+                                            'success'
+                                        )
+                                        $("#add_product_form").trigger("reset");
+                                        $("#productmodal").modal('hide');
+                                        var tables = $('#product_list').DataTable();
+                                        tables.ajax.reload();
+
+                                    }
+                                });
+
+                    }
+                    else
+                    {
+                        Swal.fire(
+                            'Error!',
+                             'Please fill all mandatory fields',
+                             'error'
+                        )
+                    }
+
+        })
+
+
+    })
+
+</script>
+<script>
+    $(document).ready(function(){
+       /*$('input#pro_img').change(function(){
+            var files = $(this)[0].files;
+            if(files.length > {{plan_data.number_of_image_per_product_val}}){
+                alert("you can select max {{plan_data.number_of_image_per_product_val}} files.");
+            }else{
+                alert("correct, you have selected less than {{plan_data.number_of_image_per_product_val}} files");
+            }
+        });
+        */
+
+         $(document).on('change','#projectinput1', function(e) {
+
+            var table = $('#address_master_table').DataTable();
+			e.preventDefault();
+			var projectinput1=$('#projectinput1').val();
+            if(projectinput1=='')
+			{
+				alert('Please enter enroll id.');
+				$('#projectinput1').focus();
+				return false;
+			}
+			if(projectinput1=='none')
+			{
+			      var tables = $('#address_master_table').DataTable();
+				  tables.ajax.reload();
+			}
+			else{
+			table.draw();
+			}
+		} );
+
+    })
+</script>
+<script>
+
+        function edit_product(id)
+        {
+            var catid='';
+            $("#appnedrow").show();
+            $.ajax({
+                url:"/product/edit_product/",
+                data:{id:id},
+                datatype:"text",
+                success: function(result){
+
+                     $.each(result.product_list,function(index,item)
+                    {
+
+                        $("#productmodal").modal('show');
+                        $("#proid").val(item.pro_id);
+                        $("#pro_name").val(item.product_name);
+                        $("#pcode").val(item.product_sku);
+                        $("#pro_price").val(item.product_price);
+                        $("#online_pro_qty").val(item.online_product_qty);
+                        $("#offline_pro_qty").val(item.offline_product_qty);
+                        $("#pro_price_ciurrency").val(item.pro_price_currency);
+                        $("#pro_price_ciurrency").selectpicker("refresh");
+
+                        $("#pro_vat").val(item.product_vat);
+
+                        $("#pro_bo").val(item.product_bo);
+                        $("#pro_bo").selectpicker("refresh");
+
+                        $("#pro_cat").val(item.product_cat_id);
+                        catid = item.product_cat_id
+                        $("#pro_cat").selectpicker("refresh");
+
+                        $("#pro_shipping_price").val(item.product_shipping_price);
+                        $("#pro_exchange_period").val(item.product_exchange_period);
+                        $("#pro_exchange_period").selectpicker("refresh");
+
+                        if(item.product_featured==false)
+                        {
+                            $('#pro_featured').prop('checked', false);
+                        }
+                        if(item.product_featured==true)
+                        {
+                            $('#pro_featured').prop('checked', true);
+                        }
+
+                        if(item.product_cod==false)
+                        {
+                            $('#pro_cod').prop('checked', false);
+                        }
+                        if(item.product_cod==true)
+                        {
+                            $('#pro_cod').prop('checked', true);
+                        }
+
+                        $("#pro_details").val(item.product_desc);
+                        $("#pro_specification").val(item.product_spec);
+
+                    });
+
+                    var img_html = '';
+                    var count =1;
+                    $.each(result.product_gall,function(index,items)
+                    {
+
+                        if(items.featured_image=='True')
+                        {
+                        img_html +='<div class="col-md-2 form-upload-add" id="img_tr_'+count+'" style="text-align:center;"><input type="checkbox" id="featured_img_edit'+count+'" name="featured_img[]" onclick="featured_img_check(this.id)" checked value="True"><img id="blah" src="/media/'+items.product_img+'"><a href="#" onClick="delete_image('+items.img_id+', '+count+')">Delete</a></div>';
+                        }
+                        else
+                        {
+                        img_html +='<div class="col-md-2 form-upload-add" id="img_tr_'+count+'" style="text-align:center;"><input type="checkbox" id="featured_img_edit'+count+'" name="featured_img[]" onclick="featured_img_check(this.id)" value="True"><img id="blah" src="/media/'+items.product_img+'"><a href="#" onClick="delete_image('+items.img_id+', '+count+')">Delete</a></div>';
+                        }
+                        count++;
+                    });
+
+                    $("#image_preview").html(img_html);
+                     var tr_data='';
+                    $.each(result.product_attr,function(index,items)
+                    {
+                        tr_data +='<tr id="'+items.attr_id+'" class="attr-row" style="margin-top:4px;" ><td class="last"><div class="topup-parent">';
+                        tr_data +='<div class="col-md-4 padd-l-0"><input autocomplete="off" type="text" class="form-control clasinput1 pro_attr" id="" value="'+items.attr_val+'" name="pro_attr[]" placeholder="Product Atribute" value=""></div>';
+                        tr_data +='<div class="col-md-3 padd-l-0"><span class="attr-val-span"></span></div>';
+                        tr_data +='<div class="col-md-3 padd-l-0"><input type="text" class="form-control input1" id="" name="attr_qty[]"  Placeholder="Quantity" value="'+items.attr_qty+'" /><input type="hidden"  class="pro_attr_id" name="pro_attr_id[]" value="'+items.attr_id+'" /></div>';
+                        tr_data +='<div class="col-md-2 padd-l-0"><span style="cursor:pointer;" class="remove"><div class="form-group addr-a-time"><i style="color:#000; font-size:22px;" class="fa fa-times" aria-hidden="true"></i></div><div class="attr-area"></div></div></div></td></tr>';
+                        var fdata =  "catid="+catid+"&attrid="+items.attr_id;
+                        $.ajax({
+                            url:'/product/getattributevalue/',
+                            data: fdata,
+                            datatype:"text",
+                            context:this,
+                            success:function (resp)
+                            {
+
+                               $('#'+items.attr_id).find('.attr-val-span').append('<select name="attr_val[]" id="'+items.attr_unit+'" class="form-control">'+resp.data[0].attr_value+'</select>');
+                               $('#'+items.attr_unit).val(items.attr_unit);
+
+                            }
+                        });
+                    });
+
+                    $("#edit_attr").html(tr_data);
+
+
+                }
+            });
+        }
+
+        function delete_product(id)
+        {
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't  to delete this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value)
+                {
+                    $.ajax({
+                        url:'/product/delete_product/',
+                        data:{id:id},
+                        datatype:"text",
+                        success:function(data)
+                        {
+                            Swal.fire(
+                                'Deleted!',
+                                'Your file has been deleted.',
+                                'success'
+                            )
+                            var tables = $('#product_list').DataTable();
+                            tables.ajax.reload();
+
+                        }
+                    });
+                }
+            })
+
+
+    }
+
+
+    function change_status(keyid)
+    {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to continue!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if (result.value)
+                {
+                    $.ajax({
+                        url:'/product/change_status/',
+                        data:{id:keyid},
+                        datatype:"text",
+                        success:function(data)
+                        {
+                            if(data == 1)
+							{
+								Swal.fire(
+                                    'Published!',
+                                    'Published successfully.',
+                                    'success'
+                                )
+							}
+							else
+							{
+							    Swal.fire(
+							        'Unpublished!',
+                                    'Unpublished successfully.',
+                                    'success'
+                                )
+							}
+                            var tables = $('#product_list').DataTable();
+                            tables.ajax.reload();
+                        }
+                    });
+                }
+            })
+    }
+</script>
+
+<script>
+    $(document).ready(function(){
+
+        $(document).on('change','#searchby',function(){
+            var searchby = $("#searchby").val();
+
+            if(searchby=='name')
+            {
+                $("#name_div").show();
+                $("#category_div").hide();
+                $("#bo_div").hide();
+                $("#subscription_expiry_div").hide();
+                $("#status_div").hide();
+                $("#regis_div").hide();
+                $("#submit_div").show();
+            }
+
+            if(searchby=='category')
+            {
+                $("#name_div").hide();
+                $("#category_div").show();
+                $("#bo_div").hide();
+                $("#subscription_expiry_div").hide();
+                $("#status_div").hide();
+                $("#regis_div").hide();
+                $("#submit_div").show();
+            }
+
+            if(searchby=='boname')
+            {
+                $("#name_div").hide();
+                $("#category_div").hide();
+                $("#bo_div").show();
+                $("#subscription_expiry_div").hide();
+                $("#status_div").hide();
+                $("#regis_div").hide();
+                $("#submit_div").show();
+            }
+
+
+            if(searchby=='status')
+            {
+
+                $("#name_div").hide();
+                $("#category_div").hide();
+                $("#bo_div").hide();
+                $("#subscription_expiry_div").hide();
+                $("#status_div").show();
+                $("#regis_div").hide();
+                $("#submit_div").show();
+            }
+
+
+
+        })
+
+        $(document).on('click','#filterbtn', function(e) {
+            e.preventDefault();
+            var table = $('#product_list').DataTable();
+			var searchby=$('#searchby').val();
+			var name=$('#name').val();
+			var category=$('#category').val();
+			var boname=$('#boname').val();
+			var prostatus=$('#prostatus').val();
+
+
+            if(searchby=='none')
+			{
+				alert('Please select any filter option.');
+				$('#searchby').focus();
+				return false;
+			}
+
+			if(searchby=='name' && name=='')
+			{
+				alert('Enter Name');
+				$('#name').focus();
+				return false;
+			}
+
+			if(searchby=='category' && category=='')
+			{
+			        alert('Select category ');
+                    $('#procategory').focus();
+                    return false;
+			}
+			if(searchby=='boname' && probo=='')
+			{
+			        alert('Select BO');
+                    $('#probo').focus();
+                    return false;
+			}
+
+
+			if(searchby=='status' && prostatus=='')
+			{
+			        alert('Select  status type');
+                    $('#prostatus').focus();
+                    return false;
+			}
+
+			else{
+			table.draw();
+			}
+		} );
+
+
+    })
+
+</script>
+<!---product attribute js --->
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#pro_img_sub').on('click',function(){
+		$('#multiple_upload_form').ajaxForm({
+			target:'#images_preview',
+			beforeSubmit:function(e){
+				$('.uploading').show();
+			},
+			success:function(e){
+				$('.uploading').hide();
+				location='admin_main.php?idq=33';
+			},
+			error:function(e){
+			}
+		}).submit();
+	});
+});
+
+$(document).on('keyup', '.pro_attr', function() {
+	var val=$(this).val();
+	var catid=$('#pro_cat').val();
+
+    if(catid==''||catid=='undefined')
+    {
+        alert('Please Select Product Category');
+        return false;
+    }
+    var form_data = "attrname="+val+"&catid="+catid;
+ 	$.ajax({
+				url: '/product/getattributename/',
+				data: form_data,
+				datatype:"text",
+				context:this,
+				success:function(res)
+				{
+					var section='';
+					var obj = res.data;
+                    section='<ul class="sugession">';
+                    for(var i = 0; i < obj.length; i++)
+                    {
+                       section +='<li class="attritem" id=' +obj[i].id+'>'+obj[i].attr_name+'</li>';
+                    }
+                    section +="</ul>";
+                    $(this).parents('tr').find('.attr-area').html(section);
+                     /* attr click*/
+
+                           $('.attritem').click(function()
+                            {
+                                    var attr=$(this).html();
+                                    $(this).parents('tr').find('.pro_attr').val(attr);
+                                    var id= $(this).attr('id');
+                                    $(this).parents('tr').find('.pro_attr_id').val(id);
+                                    $(this).parents('tr').find('.sugession').hide();
+                                    var fdata =  "catid="+catid+"&attrid="+id
+                                    $.ajax({
+                                            url:'/product/getattributevalue/',
+                                            data: fdata,
+                                            datatype:"text",
+                                            context:this,
+                                            success:function (resp)
+                                            {
+                                               $(this).parents('tr').find('.attr-val-span').append('<select name="attr_val[]" class="form-control " >'+resp.data[0].attr_value+'</select>');
+
+                                            }
+                                    });
+                            });
+
+                   /* attr click end*/
+
+
+
+				}
+
+		})
+
+
+});
+
+
+ $(document).on('click','.append',function(){
+
+	$('<tr class="attr-row" style="margin-top:4px;" ><td class="last"><div class="topup-parent"><div class="col-md-4 padd-l-0"><input autocomplete="off" type="text" class="form-control clasinput1 pro_attr" id="" name="pro_attr[]" placeholder="Product Atribute" value=""></div><div class="col-md-3 padd-l-0"><span class="attr-val-span"></span></div><div class="col-md-3 padd-l-0"><input type="text" class="form-control input1" id="" name="attr_qty[]"  Placeholder="Quantity" value="" /><input type="hidden"  class="pro_attr_id" name="pro_attr_id[]" value="" /></div><div col-md-2 padd-l-0><span style="cursor:pointer;" class="remove"><div class="form-group addr-a-time"><i style="color:#000; font-size:22px;" class="fa fa-times" aria-hidden="true"></i></div></span><div class="attr-area"></div></div></div></td></tr>').insertAfter($('.attr-row:last'));
+
+ });
+
+  $(document).on('click', '.remove', function() {
+	  //$(this).parents('tr').prev('tr').remove();
+	  $(this).closest('tr').remove();
+ });
+
+</script>
+<!---product attribute js end ---->
+{% endblock %}

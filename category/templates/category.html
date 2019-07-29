@@ -1,0 +1,1539 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block card %}
+
+<style>
+
+    .dataTables_scrollHeadInner
+    {
+	    width:100% !important;
+	}
+
+    .table
+    {
+        width:100% !important;
+    }
+
+    .form-upload-add
+    {
+        text-align:center;
+        margin-bottom:10px;
+    }
+    .form-upload-add img
+    {
+        max-width: 100%;
+        width: 40px;
+        display: block;
+        margin: auto;
+    }
+
+
+</style>
+
+<link rel="stylesheet" href="{% static 'css/bootstrap-select.css' %}">
+
+<!---------------------------------contant area----------------------------->
+
+<div class="app-content content container-fluid bg-content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="col-md-6 col-xs-6 mb-1 cont-head ">
+                <h2 class="translate_text" id="header_title">Category</h2>
+            </div>
+            <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-xs-6">
+                <div class="breadcrumb-wrapper col-xs-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#" id="bid1" class="translate_text">Home</a>
+                        </li>
+                        <li class="breadcrumb-item"><a href="/category/category/" id="bid2" class="translate_text">Category</a>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="content-body "><!-- stats -->
+            <section class="card mb-10 categ-add">
+                <div class="row w-22">
+                    <form action="#">
+                        <div class="col-lg-12">
+                            <div class="col-md-4">
+                                <div class="form-group position-relative mb-0">
+                                    <input type="text" class="form-control" id="search_category" name="search_category" placeholder="Search">
+                                    <div class="form-control-position">
+                                        <i class="fa fa-search" aria-hidden="true" id="search_btn"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-8">
+                                <div class="form-group addr-a-btn">
+                                    <i id="global_category_add" data-toggle="tooltip" data-placement="top" title="Add Category" class="fa fa-plus-circle fa-2x" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section class="card">
+                <div class="row ">
+                    <div class="col-lg-12">
+                            <table class="table  mb-0" id="category_table">
+                                <thead class="table-head ">
+                                <tr>
+                                    <th class="translate_text" width="100" id="tr1">Sr. No.</th>
+                                    <th class="translate_text" id="tr2">Category Name</th>
+                                    <th class="translate_text" width="150" id="tr3">Images</th>
+                                    <th class="translate_text" id="tr4">Description</th>
+                                    <th class="translate_text" id="tr5">Parent Category</th>
+                                    <th class="translate_text" width="150" id="tr7">Action</th>
+                                </tr>
+
+                                </thead>
+
+                                <tbody>
+                                {% for item in category_data %}
+                                <tr>
+                                    <th scope="row">{{ forloop.counter }}</th>
+                                    <td>{{item.category_name}}</td>
+                                    <td>{{item.category_description}}</td>
+                                    <td>{{item.category_parent_id}}</td>
+                                    <td>
+                                        <div class="action-area">
+                                            <a href="#"><i id="category_edit" onclick="set_modal_id({{item.id}})" class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></a>
+                                            <a href="#"><i id="category_delete" onclick="delete_category({{item.id}})" class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
+                                            <!-- <a href="#"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a>
+                                            <a href="#"><i class="fa fa-plus fa-lg" aria-hidden="true"></i></a>-->
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<!---------------------------------contant area end---------------------------->
+
+
+<!--------------------------popup--modal-------------------------->
+
+<div class="modal fade text-xs-left" id="inlineForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
+     <div class="modal-dialog" role="document">
+         <div class="modal-content">
+             <div class="modal-header popup-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+                 <label class="modal-title model-head">
+                     <h4>Category</h4>
+                 </label>
+             </div>
+             <div class="modal-body tab-area">
+                 <div class="col-xl-12 col-lg-12 padd0">
+                     <ul class="nav nav-tabs">
+                         <li class="nav-item">
+                             <a class="nav-link active" id="base-tab1" data-toggle="tab" aria-controls="tab1" href="#tab1" aria-expanded="true">Info</a>
+                         </li>
+                         <li class="nav-item">
+                             <a class="nav-link" id="base-tab2" data-toggle="tab" aria-controls="tab2" href="#tab2" aria-expanded="false">Upload Pics</a>
+                         </li>
+                     </ul>
+                     <form id="category_pop_up_id" role="form" enctype="multipart/form-data" method="post">{% csrf_token %}
+
+                     <div class="tab-content px-1 pt-1">
+                         <div role="tabpanel" class="tab-pane active" id="tab1" aria-expanded="true" aria-labelledby="base-tab1">
+                             <div class="col-lg-12 padd0">
+                                 <div class="form-body">
+                                     <div class="row">
+                                         <input type="hidden" id="val_id" name="saved_id">
+                                         <div class="col-md-6">
+                                             <div class="form-group">
+                                                 <label>Parent Category</label>
+                                                 <div id="category_div">
+                                                     <select id="category" name="category" class="form-control selectpicker cus-dropdown-search item_required" data-live-search="true">
+                                                         <option value="0">None</option>
+                                                     </select>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                         <div class="col-md-6">
+                                             <div class="form-group">
+                                                 <label>Name</label>
+                                                 <input type="text" name="category_name" id="category_name" class="form-control item_required" placeholder="Name">
+                                             </div>
+                                         </div>
+                                         <div class="col-md-12">
+                                             <div class="form-group">
+                                                 <label>Description</label>
+                                                 <textarea id="category_description" name="category_description" class="form-control item_required" placeholder=""></textarea>
+                                             </div>
+                                         </div>
+                                         <div class="col-md-12 form-group business-next">
+                                             <div class="btn btn btn-md po-save-btn" id="next_btn" >Next</div>
+                                             <input type="reset" class="btn btn-md po-close-btn" data-dismiss="modal" value="close">
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="tab-pane" id="tab2" aria-labelledby="base-tab2">
+                             <div class="col-md-12" style="text-align: center; margin-bottom:10px;">
+                                 <img src="/static/img/image_upload.png" width="45" onclick="add_img()" aria-hidden="true">
+                             </div>
+
+                             <div class="col-md-12">
+                                 <div class="col-md-10" id="image_tr"></div>
+                             </div>
+
+                             <div class="form-group">
+                                 <div class="col-lg-12" id="image_preview"></div>
+                             </div>
+
+                             <div class="col-md-12 form-group business-next">
+                                 <input type="button" class="btn btn btn-md po-save-btn" id="category_pop_up_save" value="Save">
+                                 <input type="reset" class="btn btn-md po-close-btn" data-dismiss="modal" value="close">
+                            </div>
+                        </div>
+                     </div>
+
+                     </form>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
+
+<div class="modal fade text-xs-left" id="viewForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
+     <div class="modal-dialog" role="document">
+         <div class="modal-content">
+             <div class="modal-header popup-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+                 <label class="modal-title model-head">
+                     <h4>Category</h4>
+                 </label>
+             </div>
+             <div class="modal-body tab-area">
+                 <div class="col-xl-12 col-lg-12 padd0">
+                     <ul class="nav nav-tabs">
+                         <li class="nav-item">
+                             <a class="nav-link active" id="view_base-tab1" data-toggle="tab" aria-controls="tab1" href="#view_tab1" aria-expanded="true">Info</a>
+                         </li>
+                     </ul>
+
+                     <div class="tab-content px-1 pt-1">
+                         <div role="tabpanel" class="tab-pane active" id="view_tab1" aria-expanded="true" aria-labelledby="base-tab1">
+                             <div class="col-lg-12 padd0">
+                                 <div class="form-body">
+                                     <div class="row">
+                                         <div class="col-md-6">
+                                             <div class="form-group">
+                                                 <label>Parent Category</label>
+                                                 <div id="view_category_div">
+                                                     <select id="view_category" name="category" class="form-control selectpicker cus-dropdown-search " data-live-search="true" disabled>
+                                                         <option value="0">None</option>
+                                                     </select>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                         <div class="col-md-6">
+                                             <div class="form-group">
+                                                 <label>Name</label>
+                                                 <input type="text" id="view_category_name" name="category_name" class="form-control " placeholder="Name" readonly>
+                                             </div>
+                                         </div>
+                                         <div class="col-md-12">
+                                             <div class="form-group">
+                                                 <label>Description</label>
+                                                 <textarea id="view_category_description" name="category_description" class="form-control " placeholder="" readonly></textarea>
+                                             </div>
+                                         </div>
+                                         <div class="col-md-12 form-group business-next">
+                                             <input type="reset" class="btn btn-md po-close-btn" data-dismiss="modal" value="close">
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
+
+<div class="modal fade bd-example-modal-sm text-xs-left" id="filter_view_pop_up" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
+     <div class="modal-dialog" role="document">
+         <div class="modal-content">
+             <div class="modal-header popup-header">
+
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+                 <label class="modal-title model-head">
+                     <h4>View Filter</h4>
+
+                 </label>
+                 <i id="global_filter_add" data-toggle="tooltip" data-placement="top" title="Add Filter" class="fa fa fa-plus filter-add" aria-hidden="true"></i>
+
+             </div>
+                 <div class="modal-body">
+                     <form id="filter_view_pop_up_id" role="form" enctype="multipart/form-data" method="post">{% csrf_token %}
+                         <div class="form-body">
+                             <div class="row">
+                                 <input type="hidden" id="filter_category_saved_id" name="filter_category_saved_id">
+                                 <div class="col-md-12">
+                                     <div class="form-group">
+                                         <table class="table mb-0" id="filter_table">
+                                             <thead class="table-head ">
+                                             <tr>
+                                                 <th>Sr. No.</th>
+                                                 <th>Filter Name</th>
+                                                 <th>Filter Value</th>
+                                                 <th width="130">Status</th>
+                                                 <th>Action</th>
+                                             </tr>
+
+                                             </thead>
+
+                                             <tbody>
+                                             </tbody>
+
+                                         </table>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </form>
+                 </div>
+                 <div class="modal-footer">
+                     <input type="reset" class="btn btn-md po-close-btn" data-dismiss="modal" value="close">
+                 </div>
+         </div>
+     </div>
+ </div>
+
+<div class="modal fade bd-example-modal-sm text-xs-left" id="filter_value_list_pop_up" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
+     <div class="modal-dialog" role="document">
+         <div class="modal-content">
+             <div class="modal-header popup-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+                 <label class="modal-title model-head">
+                     <h4>View Filter Value</h4>
+                 </label>
+             </div>
+                 <div class="modal-body">
+                     <form id="filter_value_list_pop_up_id" role="form" enctype="multipart/form-data" method="post">{% csrf_token %}
+                         <div class="form-body">
+                             <div class="row">
+                                 <input type="hidden" id="filter_name_saved_id" name="filter_name_saved_id">
+                                 <div class="col-md-12">
+                                     <div class="form-group">
+                                         <table class="table mb-0" id="filter_value_table">
+                                             <thead class="table-head ">
+                                             <tr>
+                                                 <th>Sr. No.</th>
+                                                 <th>Filter Value</th>
+                                                 <th>Action</th>
+                                             </tr>
+
+                                             </thead>
+
+                                             <tbody>
+                                             </tbody>
+
+                                         </table>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </form>
+                 </div>
+                 <div class="modal-footer">
+                     <input type="reset" class="btn btn-md po-close-btn" data-dismiss="modal" value="close">
+                 </div>
+         </div>
+     </div>
+ </div>
+
+<div class="modal fade bd-example-modal-sm text-xs-left" id="filter_pop_up" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
+     <div class="modal-dialog modal-sm" role="document">
+         <div class="modal-content">
+             <div class="modal-header popup-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+                 <label class="modal-title model-head">
+                     <h4>Filter Name</h4>
+                 </label>
+             </div>
+                 <div class="modal-body">
+                     <form id="filter_value_pop_up_id" role="form" enctype="multipart/form-data" method="post">{% csrf_token %}
+                         <div class="form-body">
+                             <div class="row">
+                                 <input type="hidden" id="category_saved_id" name="category_saved_id">
+                                 <input type="hidden" id="id_type" name="id_type">
+                                 <div class="col-md-12">
+                                     <div class="form-group">
+                                         <label>Name</label>
+                                         <input type="text" name="filter_name" id="filter_name" class="form-control" placeholder="Name">
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </form>
+                 </div>
+                 <div class="modal-footer">
+                     <input type="submit" class="btn btn btn-md po-save-btn" id="filter_pop_up_save" value="Save">
+                     <input type="reset" class="btn btn-md po-close-btn" data-dismiss="modal" value="close">
+                 </div>
+         </div>
+     </div>
+ </div>
+
+<div class="modal fade bd-example-modal-sm text-xs-left" id="filter_value_pop_up" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
+     <div class="modal-dialog modal-sm" role="document">
+         <div class="modal-content">
+             <div class="modal-header popup-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+                 <label class="modal-title model-head">
+                     <h4>Filter Value</h4>
+                 </label>
+             </div>
+                 <div class="modal-body">
+                     <form id="add_filter_value_pop_up_id" role="form" enctype="multipart/form-data" method="post">{% csrf_token %}
+                         <div class="form-body">
+                             <div class="row">
+                                 <input type="hidden" id="filter_saved_id" name="filter_saved_id">
+                                 <input type="hidden" id="filter_type_id" name="filter_type_id">
+                                 <div class="col-md-12">
+                                     <div class="form-group">
+                                         <label>Value</label>
+                                         <input type="text" name="filter_value_name" id="filter_value_name" class="form-control" placeholder="Value">
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </form>
+                 </div>
+                 <div class="modal-footer">
+                     <input type="submit" class="btn btn btn-md po-save-btn" id="filter_value_pop_up_save" value="Save">
+                     <input type="reset" class="btn btn-md po-close-btn" data-dismiss="modal" value="close">
+                 </div>
+         </div>
+     </div>
+ </div>
+
+<!-----------------------popup--modal---------------------------->
+
+
+<!--------------popup--modal for language convert----------------->
+
+<div class="modal fade text-xs-left bd-example-modal-lg" id="static_content_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
+
+    <div class="modal-dialog modal-lg" role="document">
+        <form action="#" name="lang_conversionForm" id="lang_conversionForm" method="POST">{% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header popup-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div class="col-md-4">
+                    <label class="modal-title model-head">
+                        <h4>Language Conversion</h4>
+                    </label>
+                    </div>
+                    <div class="col-md-4">
+                    <select id="dropdown-flag" class="form-control" name="convert_in">
+                        <option value=""><i class="flag-icon flag-icon-gb"></i> Select Langauge</option>
+                        <option value="EN"><i class="flag-icon flag-icon-gb"></i> English</option>
+                        <option value="AR"><i class="flag-icon flag-icon-gb"></i> عربى</option>
+                    </select>
+                    </div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-12 pop_scroll">
+                                <div class="form-group">
+                                    <table class="table table-bordered table-striped display nowrap dataTable">
+                                        <thead><tr><th>Content</th><th>Convert</th></tr></thead>
+                                        <tbody id="static_content_data">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" form-group business-next">
+                        <input type="submit" class="btn btn btn-md po-save-btn" value="Save">
+                        <input type="button" class="btn btn-md po-close-btn" data-dismiss="modal" value="Close">
+                    </div>
+                </div>
+            </div>
+         </form>
+    </div>
+</div>
+
+<!--------------popup--modal for language convert----------------->
+
+
+<!--------------popup--modal for gallery view----------------->
+
+<div class="modal fade" id="galleryModal" tabindex="-1" role="dialog" aria-labelledby="ModalCarouselLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+
+        <div class="col-md-12">
+          <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+              <ol class="carousel-indicators" id="cindecator">
+                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="1" class=""></li>
+                <li data-target="#carousel-example-generic" data-slide-to="2" class=""></li>
+              </ol>
+              <div class="carousel-inner" id="imgitem" role="listbox">
+              </div>
+              <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                <span class="icon-prev" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                <span class="icon-next" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!--------------popup--modal for gallery view----------------->
+
+
+{% endblock %}
+
+{% block jsbody %}
+
+
+<script>
+
+
+    var j = 1;
+
+
+    //--------JS FOR DATATABLE------//
+
+
+    $(document).ready(function()
+    {
+        $('#category_table').DataTable(
+        {
+            "processing": true,
+            "scrollX": false,
+            "searching":false,
+            "bLengthChange": false,
+            "serverSide": true,
+            "ordering": false,
+            "ajax":
+            {
+                "url": "/category/get_category_list/",
+                "data": function ( d )
+                {
+                    d.search=$("#search_category").val();
+                }
+            }
+        });
+
+
+		$(document).on('keyup','#search_category', function(e)
+		{
+		    var table = $('#category_table').DataTable();
+	    	e.preventDefault();
+			var search = $('#search_category').val();
+
+			if(search == '')
+			{
+				var tables = $('#category_table').DataTable();
+				tables.ajax.reload();
+			}
+			else
+			{
+			    table.draw();
+			}
+		});
+
+		$('#filter_table').DataTable(
+        {
+            "processing": true,
+            "scrollX": false,
+            "searching":false,
+            "bLengthChange": false,
+            "serverSide": true,
+            "ordering": false,
+            "ajax":
+            {
+                "url": "/category/get_filter_list/",
+                "data": function ( d )
+                {
+                    d.category_id=$("#filter_category_saved_id").val();
+                }
+            }
+        });
+
+
+        $('#filter_value_table').DataTable(
+        {
+            "processing": true,
+            "scrollX": false,
+            "searching":false,
+            "bLengthChange": false,
+            "serverSide": true,
+            "ordering": false,
+            "ajax":
+            {
+                "url": "/category/get_filter_value_list/",
+                "data": function ( d )
+                {
+                    d.filter_id=$("#filter_name_saved_id").val();
+                }
+            }
+        });
+
+    })
+
+
+    //------END OF JS FOR DATATABLE------//
+
+
+
+    //------JS FOR CATEGORY ADD------//
+
+
+    $(document).ready(function()
+    {
+        $(document).on('click','#global_category_add',function()
+        {
+            $('#val_id').val('');
+
+            $("#category_pop_up_id").trigger("reset");
+            $("#image_preview").html('');
+
+            $('#inlineForm').modal('show');
+            $('.pip').remove();
+
+            $.ajax({
+                url:"/category/get_category/",
+                datatype:"text",
+				success:function(data)
+				{
+				    $('#category_div').html('');
+
+				    var html = '';
+				    html += '<select id="category" name="category" class="form-control selectpicker cus-dropdown-search item_required" data-live-search="true">';
+				    html += '<option value="0">None</option>';
+                    $.each(JSON.parse(data),function(index,item)
+                    {
+                        html += '<option value="'+item.id+'">'+item.category_display+'</option>';
+                    });
+                    html += '</select>';
+                    $('#category_div').append(html);
+                    $('.selectpicker').selectpicker();
+                }
+		    });
+        })
+    })
+
+
+    //------END OF JS FOR CATEGORY ADD------//
+
+
+    //------JS FOR CATEGORY SAVE------//
+
+
+    $(document).ready(function()
+    {
+        $(document).on('click','#category_pop_up_save',function(e)
+        {
+            e.preventDefault();
+            var emptyFlag = 0;
+            var firstError = 0;
+
+            emptyFlag = checkMandatoryField('item_required');
+
+            if(emptyFlag == 0)
+            {
+                make_false_checkbox();
+                var formDataSerialized = new FormData($('#category_pop_up_id')[0]);
+                $.ajax({
+                    url:"/category/category_operations/",
+                    method:"POST",
+                    data:formDataSerialized,
+                    async:false,
+                    cache:false,
+                    contentType:false,
+                    processData:false,
+                    success:function(data)
+                    {
+                        Swal.fire(
+                            'Success!',
+                             data.msg,
+                            'success'
+                        )
+                        var tables = $('#category_table').DataTable();
+                        tables.ajax.reload();
+                        $('#inlineForm').modal('hide');
+
+                    }
+                });
+            }
+            else
+            {
+                Swal.fire(
+                    'Error!',
+                     'Please fill all mandatory fields',
+                     'error'
+                )
+            }
+        })
+    })
+
+
+    //------END OF JS FOR CATEGORY SAVE------//
+
+
+    //------JS FOR CHECKING CHECKBOX------//
+
+
+    function make_false_checkbox()
+    {
+	  	$("#category_pop_up_id input:checkbox").each(function()
+	  	{
+			if($(this).prop("checked")!=true){
+			  $(this).val("False");
+			  $(this).prop("checked", true);
+			}
+	  	});
+	}
+
+
+
+    //------END OF JS FOR CHECKING CHECKBOX------//
+
+
+
+    //------JS FOR CATEGORY EDIT------//
+
+
+    function set_modal_id(id)
+    {
+        $('#inlineForm').modal('show');
+        $('#val_id').val(id);
+        var category_id = 0;
+
+        $('#image_preview').html('');
+        $('#image_tr').html('');
+
+        $.ajax({
+            url:"/category/get_saved_category/",
+            data:{id:id},
+            datatype:"text",
+			success:function(result)
+			{
+			    $.each(result.cat_list,function(index,item)
+                {
+                    category_id = item.category_parent_id;
+                    $('#category_name').val(item.category_name);
+                    $('#category_description').val(item.category_description);
+
+                });
+
+			    $.ajax({
+                    url:"/category/get_category/",
+                    datatype:"text",
+                    success:function(data)
+                    {
+                        $('#category_div').html('');
+
+                        var html = '';
+                        html += '<select id="category" name="category" class="form-control selectpicker cus-dropdown-search item_required" data-live-search="true">';
+                        html += '<option value="0">None</option>';
+                        $.each(JSON.parse(data),function(index,item)
+                        {
+                           if(category_id == item.id)
+                           {
+                           html += '<option value="'+item.id+'" selected>'+item.category_display+'</option>';
+                           }
+                           else
+                           {
+                           html += '<option value="'+item.id+'">'+item.category_display+'</option>';
+                           }
+                        });
+                        html += '</select>';
+                        $('#category_div').append(html);
+                        $('.selectpicker').selectpicker('refresh');
+                    }
+                });
+
+                var img_html = '';
+                var count =1;
+                $.each(result.gal_list,function(index,item)
+                {
+                    if(item.category_featured_img)
+                    {
+                    img_html +='<div class="col-md-2 form-upload-add" id="img_tr_'+count+'" style="text-align:center;"><input type="checkbox" id="featured_img_edit'+count+'" name="featured_img[]" onclick="featured_img_check(this.id)" checked value="True"><img id="blah" src="/media/'+item.category_image+'"><a href="#" onClick="delete_image('+item.img_id+', '+count+')">Delete</a></div>';
+                    }
+                    else
+                    {
+                    img_html +='<div class="col-md-2 form-upload-add" id="img_tr_'+count+'" style="text-align:center;"><input type="checkbox" id="featured_img_edit'+count+'" name="featured_img[]" onclick="featured_img_check(this.id)" value="True"><img id="blah" src="/media/'+item.category_image+'"><a href="#" onClick="delete_image('+item.img_id+', '+count+')">Delete</a></div>';
+                    }
+                    count++;
+                });
+
+                $("#image_preview").html(img_html);
+            }
+		});
+    }
+
+
+    //------END OF JS FOR CATEGORY EDIT------//
+
+
+
+    //------JS FOR CATEGORY DELETE------//
+
+
+    function delete_category(id)
+    {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value)
+                {
+                    $.ajax({
+                        url:'/category/category_delete/',
+                        data:{id:id},
+                        datatype:"text",
+                        success:function(data)
+                        {
+                            if(data == 1)
+							{
+								Swal.fire(
+                                    'Deleted!',
+                                    'Your Data has been deleted.',
+                                    'success'
+                                )
+							}
+							else
+							{
+							    Swal.fire(
+                                    'Error!',
+                                    'Your Data cannot be deleted.',
+                                    'error'
+                                )
+							}
+
+							var tables = $('#category_table').DataTable();
+                            tables.ajax.reload();
+
+                            /*$.get("/category/category_list/", function(data, status)
+                            {
+                                $("table.table tbody").html(data);
+                            });*/
+                        }
+                    });
+                }
+            })
+    }
+
+
+    //------END OF JS FOR CATEGORY DELETE------//
+
+
+
+     //------JS FOR CATEGORY VIEW ------//
+
+
+    function view_data(keyid)
+    {
+        $('#viewForm').modal('show');
+        $.ajax({
+            url:"/category/get_saved_category/",
+            data:{id:keyid},
+            datatype:"text",
+			success:function(result)
+			{
+			    $('.pip').remove();
+			    $.each(result.cat_list,function(index,item)
+                {
+                    category_id = item.category_parent_id;
+                    $('#view_category_name').val(item.category_name);
+                    $('#view_category_description').val(item.category_description);
+
+                });
+
+			    $.ajax({
+                    url:"/category/get_category/",
+                    datatype:"text",
+                    success:function(data)
+                    {
+                        $('#view_category_div').html('');
+
+                        var html = '';
+                        html += '<select id="category" name="category" class="form-control selectpicker cus-dropdown-search item_required" data-live-search="true" disabled>';
+                        html += '<option value="0">None</option>';
+                        $.each(JSON.parse(data),function(index,item)
+                        {
+                           if(category_id == item.id)
+                           {
+                           html += '<option value="'+item.id+'" selected>'+item.category_display+'</option>';
+                           }
+                           else
+                           {
+                           html += '<option value="'+item.id+'">'+item.category_display+'</option>';
+                           }
+                        });
+                        html += '</select>';
+                        $('#view_category_div').append(html);
+                        $('.selectpicker').selectpicker('refresh');
+                    }
+                });
+            }
+		});
+    }
+
+    //------END OF JS FOR CATEGORY VIEW ------//
+
+
+
+    //------JS FOR FILTER LIST------//
+
+
+    function view_filter(keyid)
+    {
+        $('#filter_category_saved_id').val(keyid);
+        $('#filter_view_pop_up').modal('show');
+
+		var table = $('#filter_table').DataTable();
+
+    	if(table == '')
+		{
+			var tables = $('#filter_table').DataTable();
+			tables.ajax.reload();
+		}
+		else
+		{
+		    table.draw();
+		}
+    }
+
+
+    //------END OF JS FOR FILTER LIST------//
+
+
+
+    //------JS FOR FILTER ADD------//
+
+
+    $(document).ready(function()
+    {
+        $(document).on('click','#global_filter_add',function()
+        {
+            var id = $('#filter_category_saved_id').val();
+            $('#category_saved_id').val(id);
+            $('#id_type').val('category_id');
+            $('#filter_pop_up').modal('show');
+            $('#filter_name').val('');
+        })
+    })
+
+
+    //------END OF JS FOR FILTER ADD------//
+
+
+
+    //------JS FOR FILTER SAVE------//
+
+
+    $(document).ready(function()
+    {
+        $(document).on('click','#filter_pop_up_save',function()
+        {
+            $.ajax({
+                url:"/category/filter_operations/",
+				method:"POST",
+				data:$('#filter_value_pop_up_id').serialize(),
+				success:function(data)
+				{
+				    Swal.fire(
+				        'Success!',
+                         data.msg,
+                        'success'
+                    )
+                    $('#filter_pop_up').modal('hide');
+                    var tables = $('#filter_table').DataTable();
+			        tables.ajax.reload();
+                }
+		    });
+        })
+    })
+
+
+    //------END OF JS FOR FILTER SAVE------//
+
+
+
+    //------JS FOR FILTER EDIT------//
+
+
+    function set_edit_modal_id(id)
+    {
+        $('#filter_pop_up').modal('show');
+        $('#id_type').val('filter_id');
+        $('#category_saved_id').val(id);
+
+        $.ajax({
+            url:"/category/get_saved_filter/",
+            data:{id:id},
+            datatype:"text",
+			success:function(data)
+			{
+			    $.each(JSON.parse(data),function(index,item)
+                {
+                    $('#filter_name').val(item.filter_name);
+                });
+            }
+		});
+    }
+
+
+
+    //------END OF JS FOR FILTER EDIT------//
+
+
+    //------JS FOR FILTER DELETE------//
+
+
+    function delete_filter(keyid)
+    {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value)
+                {
+                    $.ajax({
+                        url:'/category/filter_delete/',
+                        data:{id:keyid},
+                        datatype:"text",
+                        success:function(data)
+                        {
+                            if(data == 1)
+							{
+								Swal.fire(
+                                    'Deleted!',
+                                    'Your Data has been deleted.',
+                                    'success'
+                                )
+							}
+							else
+							{
+							    Swal.fire(
+                                    'Error!',
+                                    'Your Data cannot be deleted.',
+                                    'error'
+                                )
+							}
+							var tables = $('#filter_table').DataTable();
+                            tables.ajax.reload();
+                        }
+                    });
+                }
+            })
+    }
+
+
+    //------END OF JS FOR FILTER DELETE------//
+
+
+
+    //------JS FOR FILTER VALUE LIST------//
+
+
+    function filter_value_list(keyid)
+    {
+        $('#filter_value_list_pop_up').modal('show');
+        $('#filter_name_saved_id').val(keyid);
+
+        var table = $('#filter_value_table').DataTable();
+
+    	if(table == '')
+		{
+			var tables = $('#filter_value_table').DataTable();
+			tables.ajax.reload();
+		}
+		else
+		{
+		    table.draw();
+		}
+    }
+
+
+    //------END OF JS FOR FILTER VALUE LIST------//
+
+
+    //------JS FOR ADD FILTER VALUE------//
+
+
+    function add_filter_value(keyid)
+    {
+        $('#filter_saved_id').val(keyid);
+        $('#filter_type_id').val('filter_id');
+        $('#filter_value_name').val('');
+        $('#filter_value_pop_up').modal('show');
+    }
+
+
+    //------END OF JS FOR ADD FILTER VALUE------//
+
+
+
+    //------JS FOR FILTER VALUE SAVE------//
+
+
+    $(document).ready(function()
+    {
+        $(document).on('click','#filter_value_pop_up_save',function()
+        {
+            $.ajax({
+                url:"/category/filter_value_operations/",
+                method:"POST",
+                data:$('#add_filter_value_pop_up_id').serialize(),
+                success:function(data)
+                {
+                    Swal.fire(
+                        'Success!',
+                         data.msg,
+                        'success'
+                    )
+                    var tables = $('#filter_table').DataTable();
+                    tables.ajax.reload();
+                    var tables = $('#filter_value_table').DataTable();
+                    tables.ajax.reload();
+                    $('#filter_value_pop_up').modal('hide');
+                }
+            });
+        })
+    })
+
+
+    //------END OF JS FOR FILTER VALUE SAVE------//
+
+
+
+    //------JS FOR FILTER VALUE EDIT------//
+
+
+    function set_filter_value_modal_id(keyid)
+    {
+        $('#filter_value_pop_up').modal('show');
+        $('#filter_saved_id').val(keyid);
+        $('#filter_type_id').val('filter_value_id');
+
+        $.ajax({
+            url:"/category/get_saved_filter_values/",
+            data:{id:keyid},
+            datatype:"text",
+			success:function(data)
+			{
+			    $.each(JSON.parse(data),function(index,item)
+                {
+                    $('#filter_value_name').val(item.filter_value);
+                });
+            }
+		});
+    }
+
+
+    //------END OF JS FOR FILTER VALUE EDIT------//
+
+
+
+
+    //------JS FOR FILTER VALUE DELETE------//
+
+
+
+    function delete_filter_value(keyid)
+    {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value)
+                {
+                    $.ajax({
+                        url:'/category/filter_value_delete/',
+                        data:{id:keyid},
+                        datatype:"text",
+                        success:function(data)
+                        {
+                            if(data == 1)
+							{
+								Swal.fire(
+                                    'Deleted!',
+                                    'Your Data has been deleted.',
+                                    'success'
+                                )
+							}
+							else
+							{
+							    Swal.fire(
+                                    'Error!',
+                                    'Your Data cannot be deleted.',
+                                    'error'
+                                )
+							}
+
+                            var tables = $('#filter_value_table').DataTable();
+                            tables.ajax.reload();
+
+                            var tables = $('#filter_table').DataTable();
+                            tables.ajax.reload();
+                        }
+                    });
+                }
+            })
+    }
+
+
+    //------END OF JS FOR FILTER VALUE DELETE------//
+
+
+
+    //------JS FOR LANGUAGE TRANSLATION------//
+
+
+    $(document).ready(function()
+    {
+        $(document).on('click','#gettransalte',function(e)
+        {
+            $(".dataTables_scrollBody th").removeAttr('class');
+            e.preventDefault();
+            var cdata='';
+            $('.translate_text').each(function()
+            {
+                cdata+='<tr><td>'+$(this).text()+'</td><td><input type="hidden" name="contentname[]" value="'+$(this).text()+'" /><input type="hidden" name="contentid[]" value="'+$(this).attr('id')+'" /><input type="text" name="contentboxvalue[]" value="" id="contentboxvalue" class="form-control contentbox" /></td></tr>';
+            });
+
+            $("#static_content_data").html(cdata);
+            $("#static_content_modal").modal('show');
+
+        })
+
+        $(document).on('submit','#lang_conversionForm',function(e)
+        {
+            e.preventDefault();
+            var lang = '{{request.session.cu_language}}';
+            var pageurl      = window.location.pathname;
+            var data    = $("#lang_conversionForm").serialize();
+            var form_data = "pageurl="+pageurl+"&lang="+lang+"&"+data;
+            $.ajax({
+                url:'/address/savePageContent/',
+                data:form_data,
+                type:"post",
+                success:function(data)
+                {
+                    Swal.fire(
+                        'Success!',
+                        'Your file has been saved.',
+                        'success'
+                    )
+                    var tables = $('#category_table').DataTable();
+                    tables.ajax.reload();
+                }
+            });
+        })
+    })
+
+
+    $(document).ready(function()
+    {
+        $(".dataTables_scrollBody th").removeAttr('class');
+        var pageurl = window.location.pathname;
+        var lang = '{{request.session.cu_language}}';
+        var form_data='pageurl='+pageurl+'&lang='+lang;
+        $.ajax({
+            url:'/address/getPageContent/',
+            data:form_data,
+            type:"post",
+            success:function(result)
+            {
+                $.each(JSON.parse(result),function(index,item)
+                {
+                    $("#"+item.attribute_id).html(item.attribute_value);
+                });
+
+                var tables = $('#category_table').DataTable();
+                tables.destroy();
+                $('#category_table').DataTable(
+                {
+                    "processing": true,
+                    "scrollX": false,
+                    "searching":false,
+                    "bLengthChange": false,
+                    "serverSide": true,
+                    "ordering": false,
+                    "ajax":
+                    {
+                        "url": "/category/get_category_list/",
+                        "data": function ( d )
+                        {
+                            d.search=$("#search_category").val();
+                        }
+                    }
+                });
+            }
+        });
+    })
+
+
+    //------END OF JS FOR LANGUAGE TRANSLATION------//
+
+
+
+    //------JS FOR MULTIPLE IMAGE ------//
+
+
+    function add_img()
+    {
+        var html = '<td id="img_td'+j+'"><input type="file" style="display: none;" name="upload_files[]" id="upload_files'+j+'" onchange="preview_image('+j+')" /></td>';
+        $('#image_tr').append(html);
+        $("#upload_files"+j).click();
+        j++;
+    }
+
+
+
+    function preview_image(keyid)
+    {
+        var total_file=document.getElementById("upload_files"+keyid).files.length;
+        var deleted_file_ids = [];
+        for(var i=0;i<total_file;i++)
+        {
+            var img_html ='<div class="col-md-2 form-upload-add" id="img_show_div'+keyid+'" style="text-align:center;"><input type="checkbox" id="featured_img'+j+'" onclick="featured_img_check(this.id)" name="featured_img[]" value="True"><img id="blah" src="'+URL.createObjectURL(event.target.files[i])+'"><a href="#" onclick="del_pic('+keyid+')">Delete</a></div>';
+            $('#image_preview').append(img_html);
+        }
+    }
+
+
+    function del_pic(keyid)
+    {
+        $('#img_show_div'+keyid).remove();
+        $('#img_td'+keyid).remove();
+    }
+
+
+    function featured_img_check(keyid)
+    {
+        var byName = document.getElementsByName('featured_img[]');
+
+        for (var k = 0; k <byName.length; k++)
+        {
+            var is_checked = $('#'+byName[k].id).prop("checked");
+            if((is_checked == true) & (byName[k].id != keyid))
+			{
+			    $('#'+byName[k].id).prop("checked", false);
+			}
+	    }
+    }
+
+
+    //------END OF JS FOR MULTIPLE IMAGE ------//
+
+
+    //------JS FOR GALLERY IMAGE ------//
+
+
+    function get_img(keyid)
+    {
+        $.ajax({
+            url:"/category/get_saved_img/",
+            data:{id:keyid},
+            datatype:"text",
+			success:function(result)
+			{
+			    var img_html = '';
+			    var i=1;
+			    var j=0;
+			    var s_active='';
+			    var indicator='';
+                $.each(result.cat_gal_list,function(index,item)
+                {
+                    if(i==1)
+                    {
+                        s_active='active';
+                    }
+                    else
+                    {
+                        s_active='';
+                    }
+
+                    img_html +='<div class="carousel-item '+s_active+' " >';
+                    img_html +='<img style="height:320px; width:100%;" src="/media/'+item.category_image+'"/>';
+                    img_html +='</div>';
+
+                    indicator += '<li data-target="#carousel-example-generic" data-slide-to="'+j+'" class="'+s_active+'"></li>';
+
+                    i++;
+                });
+
+                $("#cindecator").html(indicator);
+                $("#imgitem").html(img_html);
+                $("#galleryModal").modal('show');
+            }
+		});
+    }
+
+
+    //------END OF JS FOR GALLERY IMAGE ------//
+
+
+    $("div#next_btn").click(function()
+    {
+        $("a#base-tab2").addClass("active");
+        $("a#base-tab1").removeClass("active");
+        $("div#tab2").addClass("active");
+        $("div#tab1").removeClass("active");
+    });
+
+
+    //------JS FOR DELETE IMAGE ------//
+
+
+    function delete_image(keyid, id)
+    {
+        $.ajax({
+            url:"/category/del_img/",
+            data:{id:keyid},
+            datatype:"text",
+			success:function(result)
+			{
+			    $('#img_tr_'+id).remove();
+            }
+		});
+    }
+
+
+    //------END OF JS FOR DELETE IMAGE ------//
+
+
+
+    //------JS APPROVED & REJECTION ------//
+
+
+    function approve_rejected(id)
+    {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, approved it!'
+            }).then((result) => {
+                if (result.value)
+                {
+                    $.ajax({
+                        url:'/category/approve_filter/',
+                        data:{id:id},
+                        datatype:"text",
+                        success:function(data)
+                        {
+                            Swal.fire(
+                                'Approved!',
+                                'Your filter has been approved.',
+                                'success'
+                            )
+                            var tables = $('#filter_table').DataTable();
+                            tables.ajax.reload();
+                        }
+                    });
+                }
+            })
+    }
+
+
+
+    function reject_approved(id)
+    {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, reject it!'
+            }).then((result) => {
+                if (result.value)
+                {
+                    $.ajax({
+                        url:'/category/reject_filter/',
+                        data:{id:id},
+                        datatype:"text",
+                        success:function(data)
+                        {
+                            Swal.fire(
+                                'Rejected!',
+                                'Your filter has been rejected.',
+                                'success'
+                            )
+                            var tables = $('#filter_table').DataTable();
+                            tables.ajax.reload();
+
+                        }
+                    });
+                }
+            })
+    }
+
+
+    //------END OF JS APPROVED & REJECTION ------//
+
+
+
+</script>
+
+
+{% endblock %}

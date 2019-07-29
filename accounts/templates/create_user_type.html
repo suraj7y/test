@@ -1,0 +1,312 @@
+{% extends 'base.html' %}
+
+{% block card %}
+
+ <!---------------------------------contant area----------------------------->
+<style>
+    .pac-container{z-index: 1050;}
+    #myMap {
+	   height: 220px;
+	   width: 100%;
+	}
+	.dataTables_scrollHeadInner{
+	width:100% !important;
+
+	}
+    .table{
+    width:100% !important;
+    }
+    .dataTables_scroll .dataTables_scrollHead{display:none;}
+    .dataTables_scroll .dataTables_scrollBody thead tr{height:25px !important;}
+    .dataTables_scroll .dataTables_scrollBody thead tr th{height:25px !important;}
+    .dataTables_scroll .dataTables_scrollBody thead tr th div{height:25px !important;padding-top:6px;}
+    table#address_master_table tbody td {
+    padding-top: 4px !important;
+    padding-bottom: 4px;
+}
+
+
+</style>
+
+<div class="app-content content container-fluid bg-content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="col-md-6 col-xs-6 mb-1 cont-head ">
+                <h2 class="translate_text" id="header_title">Add User Type</h2>
+            </div>
+          <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-xs-12">
+            <div class="breadcrumb-wrapper col-xs-12">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" class="translate_text" id="bid1">Home </a>
+                </li>
+                <li class="breadcrumb-item"><a href="#" class="translate_text" id="bid2">Add User</a>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        <div class="content-body "><!-- stats -->
+          <section class="card mb-10 categ-add">
+          <div class="row w-22">
+           <form action="#">
+          <div class="col-lg-12">
+
+              <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="text" id="projectinput1" name="interested" class="form-control" placeholder="Search By Name">
+
+                    </div>
+                  </div>
+
+
+
+              <div class="col-md-8">
+                  <div class="form-group addr-a-btn">
+                      <i onclick="open_model()" class="fa fa-plus-circle fa-2x" title="Add New" aria-hidden="true"></i>
+                  </div>
+              </div>
+          </div>
+        </form>
+
+
+          </div>
+        </section>
+
+
+        <section class="card">
+          <div class="row ">
+            <div class="col-lg-12">
+                    <table class="table mb-0 address_type_master_table_data" id="address_type_master_table">
+                        <thead class="table-head">
+                            <tr>
+                                <th>#</th>
+                                <th class="translate_text" id="tr1">Name</th>
+                                <th class="translate_text" id="tr5">Action</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+
+              </div>
+          </div>
+        </section>
+
+        </div>
+      </div>
+    </div>
+
+<!---------------------------------contant area end---------------------------->
+
+
+
+{% endblock %}
+
+
+{% block jsbody %}
+<!---------------------- popup--modal for lagngauge convert---------------------------->
+    <div class="modal fade text-xs-left bd-example-modal-lg" id="add_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <form action="#" name="user_type_form" id="user_type_form" method="POST">{% csrf_token %}
+                          <div class="modal-content">
+                            <div class="modal-header popup-header">
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                              <label class="modal-title model-head col-md-12">
+                                  <div class="col-md-4"><h4>Add User Type</h4></div>
+                                 </label>
+                            </div>
+
+                          <div class="modal-body">
+
+                              <div class="form-body">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+
+
+                                              <div class="col-md-4">
+                                                <div class="form-group">
+                                                  <label for="name" class="translate_text">Name</label>
+                                                  <input type="text" id="name" class="form-control" placeholder="Name" name="name">
+                                                  <input type="hidden" id="ut_id" name="ut_id" value="">
+                                                </div>
+                                              </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                              </div>
+                            <div class="form-actions">
+                                    <button type="button" class="btn btn-warning mr-1" data-dismiss="modal" value="close">
+                                      <i class="icon-cross2"></i> Cancel
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">
+                                      <i class="icon-check2"></i> Save
+                                    </button>
+                            </div>
+
+
+                          </div>
+
+                      </div>
+                    </div>
+         </form>
+                  </div>
+
+  <!---------------------- popup--modal for lagngauge convert---------------------------->
+
+
+<script>
+  $(document).ready(function(){
+        $(document).on('submit','#user_type_form',function(e){
+            e.preventDefault();
+            var form_data = new FormData($(this)[0]);
+            $.ajax({
+			url:'/user_management/saveUserType/',
+			type:'POST',
+			data:form_data,
+			cache:false,
+            contentType: false,
+            processData: false,
+			success: function(result){
+			    Swal.fire(
+				        'Success!',
+                         result,
+                        'success'
+                    )
+                    $("#user_type_form").trigger("reset");
+                    $("#add_modal").modal('hide');
+                    var tables = $('#address_type_master_table').DataTable();
+                    tables.ajax.reload();
+
+			}
+		});
+        })
+
+
+
+
+  })
+</script>
+
+<script>
+    $(document).ready(function(){
+    $(".dataTables_scrollBody th").removeAttr('class');
+    var pageurl      = window.location.pathname;
+    var lang = '{{request.session.cu_language}}';
+    var form_data='pageurl='+pageurl+'&lang='+lang;
+      $.ajax({
+                        url:'/address/getPageContent/',
+                        data:form_data,
+                        type:"post",
+                        success:function(result)
+                        {
+                                    $.each(JSON.parse(result),function(index,item)
+                                    {
+                                         var id="'#"+item.attribute_id+"'";
+                                         $("#" + item.attribute_id).html(item.attribute_value);
+
+
+                                    });
+
+                                       var tables = $('#address_type_master_table').DataTable();
+                                       tables.destroy();
+                                       $('#address_type_master_table').DataTable({
+                                       "processing": true,
+                                       "scrollX": true,
+                                       "searching":false,
+                                       "bLengthChange": false,
+                                       "serverSide": true,
+                                       "ordering": false,
+                                       "ajax": {
+                                       "url": "/user_management/getUser_type_list/",
+                                       "data": function ( d )
+                                       {
+                                            d.search=$("#projectinput1").val();
+                                       }
+
+
+                                      }
+
+                                 });
+
+                        }
+                    });
+
+
+
+    })
+
+</script>
+
+<script>
+    function edit_user_type(id)
+    {
+        $.ajax({
+			url:"/user_management/getsaveUser_type/",
+            data:{id:id},
+            datatype:"text",
+			success: function(result){
+			    console.log(result);
+			     $.each(result.address_type_name,function(index,item)
+                {
+
+                    $("#add_modal").modal('show');
+                    $("#ut_id").val(item.id);
+                    $("#name").val(item.name);
+
+                });
+        }
+		});
+    }
+
+    function delete_user_type(id)
+    {
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value)
+                {
+                    $.ajax({
+                        url:'/user_management/delete_user_type/',
+                        data:{id:id},
+                        datatype:"text",
+                        success:function(data)
+                        {
+                            Swal.fire(
+                                'Deleted!',
+                                'Your file has been deleted.',
+                                'success'
+                            )
+                            var tables = $('#address_type_master_table').DataTable();
+                            tables.ajax.reload();
+
+                        }
+                    });
+                }
+            })
+
+
+    }
+
+    function open_model()
+    {
+        $("#add_modal").modal("show");
+        $("#user_type_form").trigger("reset");
+        $("#user_type_form")[0].reset();
+
+    }
+</script>
+
+{% endblock %}

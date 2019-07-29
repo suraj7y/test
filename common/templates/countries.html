@@ -1,0 +1,324 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block card %}
+
+<style>
+.col-md-12.form-group.align-right
+{
+    text-align: right;
+}
+.dataTables_scrollHeadInner, .table.mb-0.dataTable.no-footer {
+    width: 100% !important;
+}
+.table-responsive
+{
+    overflow-x: hidden;
+}
+table# tbody td {
+    text-align: center;
+}
+thead.table-head th {
+    text-align: center;
+}
+table#country_table tbody td
+{
+    text-align:center;
+}
+.dropdown-menu.open
+{
+ position: relative !important;
+}
+ul.dropdown-menu.inner {
+    padding: 0px 10px !important;
+}
+</style>
+
+   <!---------------------------------contant area----------------------------->
+
+<div class="app-content content container-fluid bg-content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="col-md-6 col-xs-6 mb-1 cont-head ">
+                <h2>Country </h2>
+            </div>
+            <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-xs-6">
+                <div class="breadcrumb-wrapper col-xs-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item">Country</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="content-body "><!-- stats -->
+            <section class="card mb-10 categ-add">
+                <div class="row w-22">
+                    <div class="col-lg-12">
+                        <div class="col-md-4 col-xs-5">
+                            <div class="form-group position-relative mb-0">
+                                <input type="text" class="form-control" name="search_country_name" id="search_country_name" placeholder="Search">
+                                <div class="form-control-position">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-xs-2">
+                            <div class="form-group addr-a-btn">
+                                <i data-toggle="modal" data-target="#inlineForm" onclick="addcountry()" class="fa fa-plus-circle" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="card mb-0">
+                <div class="row ">
+                    <div class="col-lg-12">
+                        <div class="table-responsive" >
+                            <table class="table mb-0" id="country_table">
+                                <thead class="table-head ">
+                                    <tr>
+                                        <th>Sr. No.</th>
+                                        <th>Country Name</th>
+                                        <th>Country Code</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<!---------------------------------contant area end---------------------------->
+
+
+  <!--------popup--modal--------------------------------------------------->
+
+<div class="modal fade text-xs-left" id="inlineForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header popup-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="col-md-9 col-xs-8 padd0">
+                    <label class="modal-title model-head">
+                        <h4>Add New Country</h4>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-body tab-area">
+                <form id="countryForm" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-body">
+                        <div class="col-xl-12 col-lg-12 padd0">
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="base-tab1" data-toggle="tab" aria-controls="tab1" href="#tab1" aria-expanded="true">General info</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-content px-1 pt-1">
+                            <div role="tabpanel" class="tab-pane active" id="tab1" aria-expanded="true" aria-labelledby="base-tab1">
+                                <div class="col-lg-12 pt-2 pl-0 pr-0">
+                                    <div class="form-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group update_subs">
+                                                    <label for="country_name">Country Name</label>
+                                                    <input type="text" value="" name="country_name" class="form-control" id="country_name">
+                                                    <input type="hidden" value="" name="update_country" id="update_country">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group update_subs">
+                                                    <label for="country_code">Country Code</label>
+                                                    <input type="text" value="" name="country_code" class="form-control" id="country_code">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 form-group align-right">
+                                    <input type="submit" class="btn btn  btn-md po-save-btn" value="Submit">
+                                    <input type="reset" class="btn btn-md po-close-btn" data-dismiss="modal" value="Close">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--------active --modal--------------------------------------------------->
+
+
+{% endblock %}
+{% block jsbody %}
+
+
+
+
+<script>
+    $('#countryForm').submit(function(e) { // catch the form's submit event
+        e.preventDefault();
+        var formDataSerialized = new FormData($(this)[0]);
+        $.ajax({ // create an AJAX call...
+            data: formDataSerialized, // get the form data
+            async:false,
+            cache:false,
+            contentType:false,
+            processData:false,
+            type: $(this).attr('method'), // GET or POST
+            url: '/common/add_country', // the file to call
+            success: function(response) { // on success..
+
+                Swal.fire({
+                 type: 'success',
+                 text: 'Country Added !!',
+                })
+
+                var tables = $('#country_table').DataTable();
+                tables.ajax.reload();
+            }
+        });
+
+        return false;
+    });
+
+</script>
+
+<script>
+    $(document).ready(function()
+    {
+        $('#country_table').DataTable(
+        {
+            "processing": true,
+            "scrollX": true,
+            "searching":false,
+            "bLengthChange": false,
+            "serverSide": true,
+            "ordering": false,
+            "ajax":
+            {
+                "url": "/common/get_country_list/",
+                "data": function ( d )
+                {
+                    d.search=$("#search_country_name").val();
+                }
+            }
+        });
+		$(document).on('keyup','#search_country_name', function(e)
+		{
+		    var table = $('#country_table').DataTable();
+	    	e.preventDefault();
+			var search = $('#search_country_name').val();
+
+			if(search == '')
+			{
+				var tables = $('#country_table').DataTable();
+				tables.ajax.reload();
+			}
+			else
+			{
+			    table.draw();
+			}
+		});
+    });
+
+
+</script>
+
+<script>
+  function country_delete(id)
+  {
+
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+       }).then((result) => {
+         if (result.value)
+         {
+
+             $.ajax({
+                url: '/common/country_delete/',
+                data: {id:id},
+                datatype: "text",
+                success: function(data)
+                {
+                   if(data == 1)
+                   {
+                        Swal.fire(
+                            'Deleted!',
+                            'Your Data has been deleted.',
+                            'success'
+                        )
+                    }
+                    else
+                    {
+                        Swal.fire(
+                            'Error!',
+                            'Your Data cannot be deleted.',
+                            'error'
+                        )
+                    }
+
+                   var tables = $('#country_table').DataTable();
+				    tables.ajax.reload();
+
+                }
+             });
+         }
+      })
+  }
+</script>
+
+
+<script>
+    function update_record(id)
+    {
+        $("input#update_country").val(id);
+
+        $.ajax({
+            url:"/common/get_saved_country/",
+            data:{id:id},
+            datatype:"text",
+			success:function(data)
+			{
+			   console.log(data);
+			   $.each(JSON.parse(data),function(index,item)
+               {
+                   $("input#country_name").val(item.country_name);
+                   $("input#country_code").val(item.country_code);
+
+               });
+
+                var tables = $('#country_table').DataTable();
+                tables.ajax.reload();
+            }
+        });
+    }
+</script>
+
+<script>
+    function addcountry()
+    {
+        $("input#country_name").val("");
+        $("input#update_country").val("");
+        $("input#country_code").val("");
+    }
+</script>
+
+{% endblock %}

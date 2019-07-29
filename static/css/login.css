@@ -1,0 +1,616 @@
+
+body {
+    background-color: #f9f9f9;
+    font-size: 12px;
+    padding: 0px;
+    margin: 0px;
+    
+    font-family: 'Roboto', sans-serif;  
+}
+.mb-15{
+  margin-bottom: 15px;
+}
+
+.register-area{
+  margin: 20px 60px;
+        box-shadow: 4px 3px 5px #2d2d2d;
+      background-color: #fbfbfb;
+}
+
+.login-area{
+    margin: 20px 60px;
+       box-shadow: 4px 3px 5px #2d2d2d;
+    overflow: hidden;
+    background-color: rgb(251, 251, 251);
+}
+.form-area{
+       padding: 35px 10px 0px 10px;  
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    display: -webkit-box;
+        border-top: 0px solid #01209c;
+}
+
+.select-registration{
+     padding: 35px 74px 0px 74px;
+    width: 100%;
+    float: left;
+    border: inherit;
+    box-shadow: inherit;
+
+}
+
+.register-1{
+   padding: 8px 90px 0px 90px;
+    width: 100%;
+    float: left;
+    border: inherit;
+    box-shadow: inherit;
+    
+}
+.register-ingap{
+  min-height: 310px;
+   padding: 0px 15px 0px 36px;
+    width: 100%;
+    float: left;
+    border: inherit;
+    box-shadow: inherit;
+    
+}
+
+.c-input-area{
+    padding: 20px 115px 20px 115px;
+    width: 100%;
+    float: left;
+    border: inherit;
+    box-shadow: inherit;
+}
+.c-logo-area{
+  text-align: center;
+      margin-bottom: 1.6rem;
+}
+.c-logo-area img{
+  width:90px;
+}
+.login-text{
+      margin-bottom: 15px;
+   
+}
+.login-text:after {
+    content: "\A";
+    width: 30px;
+    height: 3px;
+    background: #f6522e;
+    display: inline-block;
+}
+.c-logo-area h2{
+      text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 15px;
+}
+.c-logo-area h2 span{
+      text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 15px;
+    color:#f6522e;
+}
+.login-text h4{
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #000;
+      margin-bottom: 0px;
+}
+
+.login-text-button{
+  padding-top: 10px;
+      padding-right: 0px;
+}
+.login-text-button button{
+  font-size: 12px;
+    text-transform: uppercase;
+    background: inherit;
+    border: inherit;
+    float: right;
+    cursor: pointer;
+    
+}
+.login-text-button button i{
+       font-size: 13px;
+    text-transform: uppercase;
+    background: inherit;
+    /* border: inherit; */
+    /* float: right; */
+    color: #f6522e;
+    /* margin-left: 8px; */
+}
+.user-policy{
+      padding-top: 20px;
+    padding-right: 0px;
+    padding-left: 0px;
+
+}
+.user-policy button{
+     font-size: 12px;
+    text-transform: uppercase;
+    background: #217dd0;
+    float: right;
+    cursor: pointer;
+    padding: 6px 12px;
+    border: 1px solid #217dd0;
+    color: #fff;
+    
+}
+
+.dont-have{
+       width: 100%;
+    margin-top: 70px;
+}
+.dont-have h4{
+  margin-bottom: 0px;
+  font-size: 14px;
+  
+}
+.dont-have h4 a{
+  margin-bottom: 0px;
+  font-size: 14px;
+  color: #1db504;
+}
+
+.login-two{
+      width: 45px;
+    height: 45px;
+    position: absolute;
+    top: -35px;
+    left: 38%;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #fff;
+    text-align: center;
+    /* display: table-cell; */
+    /* vertical-align: middle; */
+    padding-top: 6px;
+    font-size: 20px;
+}
+.login-two img{
+    width: 48px;
+}
+
+.padd-10{
+  padding:10px !important;
+}
+.add-logo {
+      border: 1px solid #ddd;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+.add-logo img{
+  max-width:30px;
+  height:30px;
+  margin-top:0px;
+  border: 1px solid #ddd;
+}
+.add-area{
+  padding:3px 0px;
+
+}
+.add-logo-input{
+
+
+}
+.add-area input{
+  max-width: 100%;
+}
+
+.sign-left-area{
+       background-image: url(../img/bg-line.png) !important;
+    padding: 50px 30px 30px 30px;
+    text-align: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.sign-left-area h2{
+      color: #fff;
+    font-size: 32px;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    margin-bottom: 10px;
+}
+.sign-left-area p{
+        color: #fff;
+    font-size: 14px;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    line-height: 24px;
+    letter-spacing: 0.5px;
+     margin-bottom: 30px;
+}
+.sign-left-area button{
+    border: 0;
+    color: #151515;
+    font-size: 12px;
+    font-weight: 400;
+    border-radius: 2px;
+    padding: 5px 10px;
+    background-color: #ffffff;
+    width: 110px;
+    cursor: pointer;
+   
+}
+.login-left-img {
+  padding:120px 30px 30px 30px;
+}
+.login-left-img img{
+  width: 90px;
+  display: block; 
+  margin: auto;
+}
+
+
+
+/*---------------register-----------------------------------------*/
+
+.mobile-input{
+    padding-right: 0px;
+    padding-top: 5px;
+}
+
+.profile-img{
+       text-align: center;
+    width: 100px;
+    height: 100px;
+    border-radius: 60px;
+    background-color: #ddd;
+    overflow: hidden;
+        margin: auto;
+}
+.profile-img img{
+    width: 100%;
+    height: 100%;
+}
+.profile-img .file {
+    position: relative;
+    overflow: hidden;
+    margin-top: -52%;
+    width: 100%;
+    border: none;
+    border-radius: 0;
+    font-size: 12px;
+    background: #212529b8;
+}
+.profile-img .file input {
+    position: absolute;
+    opacity: 0;
+    right: 0;
+    top: 0;
+}
+
+
+.agent-regis-btn{
+      padding: 0px 15px 0px 36px;
+}
+.agent-regis-btn .next-step-btn{
+      border: 1px solid #f6522e;
+    color: #f6522e;
+    background-color: inherit;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.agent-regis-btn .pre-step-btn {
+    background-color: #f6522e;
+    color: #ffffff;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.login-text-2{
+  padding: 10px 62px 5px 90px;
+  
+
+}
+.login-text-2:after{
+        content: "\A";
+    width: 30px;
+    height: 3px;
+    background: #f6522e;
+    display: inline-block;
+}
+.login-text-2 h4{
+    font-size: 14px;
+    text-transform: uppercase;
+    color:#000;
+        margin-bottom: 0px;
+}
+
+.reg-button-area{
+  padding: 20px 46px 0px 46px;
+}
+
+.c-logo-register{
+      padding: 0px 90px 0px 90px;
+    width: 100%;
+    float: left;
+    border: inherit;
+    box-shadow: inherit;
+}
+.c-logo-register img{
+  width:50px;
+  float: left;
+}
+.c-logo-register h2{
+      text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 15px;
+}
+.check-register{
+      padding-left: 20px;
+    padding-top: 12px;
+}
+.pl-10{
+  padding-left: 10px;
+}
+
+
+.register-1 .input-container {
+  position: relative;
+  margin-bottom: 5px !important;
+  box-shadow: 3px 2px 8px 3px #dddddda8;
+}
+
+.register-ingap .input-container {
+  position: relative;
+  margin-bottom: 5px !important;
+  box-shadow: 3px 2px 8px 3px #dddddda8;
+}
+.cc-area{
+  padding-left: 0px;
+}
+.cc-area{
+  padding-left: 0px;
+      padding-right: 5px;
+}
+.cc-select{
+     height: 42px !important;
+    border-top: 0px !important;
+    border-right: 0px !important;
+    border-left: 0px !important;
+    border-bottom: 2px solid #807e7e;
+    width: 100%;
+    text-transform: uppercase;
+        color: #6d6d6d;
+}
+.cc-select:focus {
+    color: #55595c;
+    background-color: #fff;
+    border-color: #03b859;
+    outline: none;
+}
+.captch-area{
+    padding-top: 13px;
+    padding-left: 15px;
+}
+.captch-area img{
+  width:90px;
+  float: left;
+      margin-right: 12px;
+  
+}
+.captch-area i{
+  font-size: 22px;
+  color:#000;
+  
+}
+.register-twomo{
+  padding: 0px 0px 0px 5px;
+}
+
+
+
+@media( max-width: 480px){
+
+  .c-input-area {
+    padding: 0px;
+    width: 100%;
+    float: left;
+    border: inherit;
+    box-shadow: inherit;
+}
+
+.login-area {
+    margin: 0px;
+    box-shadow: 4px 3px 5px #ddd;
+   
+}
+.register-area {
+    margin: 0px;
+    box-shadow: 4px 3px 5px #ddd;
+}
+.c-logo-register {
+    padding: 0px;
+    width: 100%;
+    float: left;
+    border: inherit;
+    box-shadow: inherit;
+}
+.login-area {
+    margin: 0px;
+    box-shadow: 4px 3px 5px #ddd;
+    overflow: inherit;
+}
+.dont-have {
+    width: 100%;
+    margin-top: 60px;
+}
+
+.c-logo-register {
+    padding: 0px;
+    width: 100%;
+    float: left;
+    border: inherit;
+    box-shadow: inherit;
+}
+.select-registration {
+    padding: 20px 0px 0px 0px;
+    width: 100%;
+    float: left;
+    border: inherit;
+    box-shadow: inherit;
+}
+.register-ingap {
+    padding: 0px 10px 10px 10px;
+    width: 100%;
+    float: left;
+    border: inherit;
+    box-shadow: inherit;
+}
+}
+
+
+
+
+
+
+
+.radiobtn {
+  position: relative;
+  display: block;
+}
+.radiobtn .extended {
+      z-index: 100;
+    position: absolute;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: #f1f1f1;
+  margin-bottom: 5px;
+  margin-top: -7.5px;
+  border: 1px solid #f6522e;
+  border-top: 0;
+  border-radius: 0 0 5px 5px;
+  max-height: 0;
+  padding: 0;
+  opacity: 0;
+  -webkit-transform: scaleY(0);
+          transform: scaleY(0);
+  -webkit-transform-origin: 0 0;
+          transform-origin: 0 0;
+  transition: 0.3s -webkit-transform cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: 0.3s transform cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: 0.3s transform cubic-bezier(0.075, 0.82, 0.165, 1), 0.3s -webkit-transform cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.radiobtn .extended button {
+       -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 2px solid #f6522e;
+    background: #f6522e;
+    font-size: 12px;
+    text-align: center;
+    display: block;
+    width: 100%;
+    padding: 7px;
+    margin-top: 5px;
+    border-radius: 5px;
+    font-weight: 300;
+    outline: 0;
+    text-transform: uppercase;
+    color: #ffffff;
+    cursor: pointer;
+}
+.radiobtn .extended textarea {
+  display: block;
+  width: 100%;
+  min-height: 100px;
+  box-sizing: border-box;
+  padding: 10px;
+  border-radius: 5px;
+  border: 2px solid #868686;
+}
+.radiobtn .extended textarea:focus {
+  border-color: #03b859;
+  outline: 0;
+}
+
+.radiobtn label {
+  display: block;
+  background: #fff;
+  color: #444;
+  border-radius: 5px;
+  padding: 8px 16px;
+  border: 1px solid #f6522e;
+  margin-bottom: 5px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+.radiobtn label:after, .radiobtn label:before {
+  content: "";
+  position: absolute;
+  right: 11px;
+  top: 11px;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  background: #f6522e;
+}
+.radiobtn label:before {
+  background: transparent;
+  transition: 0.1s width cubic-bezier(0.075, 0.82, 0.165, 1) 0s, 0.3s height cubic-bezier(0.075, 0.82, 0.165, 2) 0.1s;
+  z-index: 2;
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-size: 10px;
+  background-position: center;
+  width: 0;
+  height: 0;
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNS4zIDEzLjIiPiAgPHBhdGggZmlsbD0iI2ZmZiIgZD0iTTE0LjcuOGwtLjQtLjRhMS43IDEuNyAwIDAgMC0yLjMuMUw1LjIgOC4yIDMgNi40YTEuNyAxLjcgMCAwIDAtMi4zLjFMLjQgN2ExLjcgMS43IDAgMCAwIC4xIDIuM2wzLjggMy41YTEuNyAxLjcgMCAwIDAgMi40LS4xTDE1IDMuMWExLjcgMS43IDAgMCAwLS4yLTIuM3oiIGRhdGEtbmFtZT0iUGZhZCA0Ii8+PC9zdmc+);
+}
+.radiobtn input[type="radio"] {
+  display: none;
+  position: relative;
+  width: 100%;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.radiobtn input[type="radio"]:checked + label {
+  background: #fff;
+  -webkit-animation-name: blink;
+          animation-name: blink;
+  -webkit-animation-duration: 1s;
+          animation-duration: 1s;
+  border-color: #f6522e;
+}
+.radiobtn input[type="radio"]:checked + label:after {
+  background: #f6522e;
+}
+.radiobtn input[type="radio"]:checked + label:before {
+  width: 16px;
+  height: 16px;
+}
+.radiobtn input[type="radio"]:checked + label + .extended {
+  max-height: none;
+  padding: 10px;
+  opacity: 1;
+  -webkit-animation-name: blink;
+          animation-name: blink;
+  -webkit-animation-duration: 1s;
+          animation-duration: 1s;
+  -webkit-transform: scaleY(1);
+          transform: scaleY(1);
+  margin-top: -10px;
+}
+
+

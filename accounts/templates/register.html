@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" data-textdirection="ltr" class="loading">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title></title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-extended.css' %}">
+    <!--------- font icons----------------------------->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'fonts/icomoon.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'fonts/flag-icon-css/css/flag-icon.min.css' %}">
+    
+    <!--------------- scss--------------------------------> 
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/custom-main-view.css' %}">
+    
+    <!--link rel="stylesheet" type="text/css" href="css/custom-rtl-view.css"-->
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+      <!-- END------- CSS-->
+    <style>
+        .captch-area
+        {
+            padding-left: 0px !important;
+        }
+    </style>
+</head>
+
+<body data-open="click" data-menu="vertical-menu" data-col="1-column" class="vertical-layout vertical-menu 1-column  blank-page blank-page bg-login">
+    <div class="container register-area">
+        <div class="row">
+            <div class="col-md-5 padd0">
+                <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                        <li data-target="#myCarousel" data-slide-to="1"></li>
+                        <li data-target="#myCarousel" data-slide-to="2"></li>
+                    </ol>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img class="first-slide" src="{% static 'img/login-img1.jpg' %}" alt="First slide">
+                        </div>
+                        <div class="carousel-item">
+                            <img class="second-slide" src="{% static 'img/login-img1.jpg' %}" alt="Second slide">
+                        </div>
+                        <div class="carousel-item">
+                            <img class="third-slide" src="{% static 'img/login-img1.jpg' %}" alt="Third slide">
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-7 padd0">
+                <div class="form-area">
+                    <div class="col-lg-12">
+                        <div class="col-lg-12 c-logo-register">
+                            <img src="{% static 'img/logo-4.png' %}">
+                            <h2>WELCOME TO  BUSINESS</h2>
+                        </div>
+                        <div class="col-lg-12 select-registration">
+                            <from method="POST" name="registertype" id="registertype">
+                                <div class="col-lg-6 ">
+                                    <div class="radiobtn">
+                                        <input type="radio" class="form-control" name="agentRadios" value="bo" id="huey"  checked="" />
+                                        <label for="huey">
+                                            <div class="login-two">
+                                                <i class="fa fa-building-o" aria-hidden="true"></i>
+                                            </div>Business Owner
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                        <div class="card register-1 businessowner" style="display:block;">
+                            <form method="POST" name="bo_form" id="bo_form">
+                                {%csrf_token%}
+                                <div class="login-text">
+                                    <h4>Sign up for <span>Business Owner</span></h4>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 ">
+                                        <div class="form-group">
+                                            <label for="bo_userid"> Username</label>
+                                            <input type="hidden" name="user_type_bo" id="user_type_bo" value="BO">
+                                            <input autocomplete="off" type="text" id="bo_userid" name="bo_userid" class="item_required form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 ">
+                                        <div class="form-group">
+                                            <label for="bo_email">Email</label>
+                                            <input class="form-control item_required" type="email" id="bo_email" name="bo_email" required="required"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 ">
+                                        <div class="form-group">
+                                            <label for="bo_country">Country</label>
+                                            <select class="form-control item_required" name="bo_country" id="bo_country">
+                                                <option value="">Select Country</option>
+                                                {% for obj in countries %}
+                                                <option value="{{ obj.id }}">{{ obj.country_name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 ">
+                                        <div class="form-group">
+                                            <label for="bo_city">City</label>
+                                            <select class="form-control" name="bo_city" id="bo_city">
+                                                <option>Select City</option>
+                                                {% for obj in cities %}
+                                                <option value="{{ obj.id }}">{{ obj.city_name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 padd0">
+                                        <div class="col-md-12 ">
+                                            <div class="form-group">
+                                                <label for="bo_mobile">Mobile No.</label>
+                                                <input class="form-control" type="number" min="1" id="bo_mobile" name="bo_mobile" required="required"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 ">
+                                            <div class="form-group">
+                                                <div class="col-md-6 captch-area">
+                                                    <img src="/media/captcha/captcha.jpg">
+                                                    <input type="hidden" value="{{captcha}}">
+                                                    <i class="fa fa-refresh" aria-hidden="true"></i>
+                                                </div>
+                                                <div class="col-md-6 input-container">
+                                                    <label for="captcha_code">Captcha</label>
+                                                    <input class="form-control" type="text" id="captcha_code" name="captcha_code" required="required"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 padd0">
+                                        <div class="col-md-12 ">
+                                            <div class="form-group">
+                                                <label for="bo_password">Password</label>
+                                                <input class="form-control" type="password" id="bo_password" name="bo_password" required="required"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 ">
+                                            <div class="form-group">
+                                                <label for="bo_confirmpass">Confirm Password</label>
+                                                <input class="form-control" type="password" id="bo_confirmpass" name="bo_confirmpass" required="required"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 col-xs-12 ">
+                                            <div class="form-check check-register">
+                                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                                <label class="form-check-label pl-10" for="defaultCheck1">
+                                                    User Policy
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="login-text-button agent-regis-btn">
+                                        <input type="submit" id="submit_bo_form" name="submit_bo_form" class="btn btn-next next-step-btn" value="SingUp">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/common.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/bootstrap.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/perfect-scrollbar.jquery.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/unison.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/sweetalert2%408.js' %}" type="text/javascript"></script>
+<!-- BEGIN ROBUST JS-->
+<script src="{% static 'js/app-menu.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/app.js' %}" type="text/javascript"></script>
+
+
+<script>
+$(document).ready(function(){
+        $('.toggle').on('click', function() {
+          $('.container').stop().addClass('active');
+        });
+
+        $('.close').on('click', function() {
+          $('.container').stop().removeClass('active');
+        });
+
+            $(document).on('click','#agenttype',function(e){
+
+                var slt_option = $('input[name=agentRadios]:checked').val();
+                //alert(slt_option);
+
+                    if(slt_option == 'bo')
+                    {
+                        $(".businessowner").show();
+                        $(".agentindibidual").hide();
+                        $(".agentcompany").hide();
+                    }
+                    else if(slt_option == 'individual')
+                    {
+                        $(".businessowner").hide();
+                        $(".agentindibidual").show();
+                        $(".agentcompany").hide();
+                        $(".extended").hide();
+                        $("#dewey").prop('checked', false);
+                    }
+                    else if(slt_option == 'company')
+                    {
+                        $(".businessowner").hide();
+                        $(".agentindibidual").hide();
+                        $(".agentcompany").show();
+                        $(".extended").hide();
+                        $("#dewey").prop('checked', false);
+                    }
+
+
+            })
+
+            $(document).on('click','#dewey',function(e){
+            $(".extended").show();
+            })
+
+            $(document).on('click','#huey',function(e){
+                        $(".businessowner").show();
+                        $(".agentindibidual").hide();
+                        $(".agentcompany").hide();
+            })
+
+});
+
+</script>
+<script>
+$(document).ready(function()
+{
+    $(document).on('click','#submit_bo_form',function(e)
+    {
+         e.preventDefault();
+         var form_data = $("#bo_form").serialize();
+         var captcha = '{{captcha}}';
+         var captcha_code = $("#captcha_code").val();
+
+         emptyFlag = checkMandatoryField('item_required');
+
+         if(emptyFlag == 0)
+         {
+            if(captcha!=captcha_code)
+            {
+                alert("Captcha code does not match.");
+                return false;
+                $("#captcha_code").focus();
+            }
+
+            $.ajax({
+                url:'/accounts/registration/',
+                type:'POST',
+                data:form_data,
+                beforeSend: function() {
+                    $("input#submit_bo_form").addClass('disabled');
+                    $("input#submit_bo_form").val("Sending...");
+                },
+                success: function(result)
+                {
+                    console.log(result);
+                    $("input#submit_bo_form").removeClass('disabled');
+                    $("input#submit_bo_form").val("Sign Up");
+
+                    if(result.id != 0)
+                    {
+                        Swal.fire({
+                            type: 'success',
+                            text: 'User Created Successfully !!',
+                        })
+                        window.location.href ="/accounts/verification?userid=" + result.userid;
+
+                        $("#bo_form").trigger("reset");
+                    }
+                    else
+                    {
+                        Swal.fire({
+                            type: 'error',
+                            text: 'Username or email already exists!!',
+                        })
+                    }
+                }
+            });
+
+         }
+         else
+         {
+            Swal.fire(
+                'Error!',
+                 'Please fill all mandatory fields',
+                 'error'
+            )
+         }
+
+    })
+})
+</script>
+
+<script>
+$(document).on('click','#submit_ai_button',function(e)
+{
+   e.preventDefault();
+   var form_data = new FormData($("#individual_agent")[0]);
+
+   $.ajax({
+       url:'/accounts/registration/',
+       type:'POST',
+       data:form_data,
+       cache:false,
+       contentType: false,
+       processData: false,
+       beforeSend: function()
+       {
+           $("#submit_ai_button").addClass('disabled');
+           $("#submit_ai_button").val("Sending...");
+       },
+       success: function(result)
+       {
+
+           if(result.id != 0)
+           {
+                Swal.fire({
+                    type: 'success',
+                    text: 'User Created Successfully !!',
+                })
+                window.location.href ="/accounts/verification?userid=" + result.userid;
+
+                $("#individual_agent").trigger("reset");
+           }
+           else
+           {
+                Swal.fire({
+                    type: 'error',
+                    text: 'Username or email already exists!!',
+                })
+                $("#submit_ai_button").removeClass('disabled');
+                $("#submit_ai_button").val("Sign Up");
+           }
+       }
+   });
+})
+</script>
+
+<script>
+$(document).on('click','#submit_ac_button',function(e)
+{
+   e.preventDefault();
+   var form_data = new FormData($("#compnayagent")[0]);
+
+   $.ajax({
+       url:'/accounts/registration/',
+       type:'POST',
+       data:form_data,
+       cache:false,
+       contentType: false,
+       processData: false,
+       beforeSend: function()
+       {
+           $("#submit_ac_button").addClass('disabled');
+           $("#submit_ac_button").val("Sending...");
+       },
+       success: function(result)
+       {
+
+           if(result.id != 0)
+           {
+                Swal.fire({
+                    type: 'success',
+                    text: 'User Created Successfully !!',
+                })
+                window.location.href ="/accounts/verification?userid=" + result.userid;
+
+                $("#compnayagent").trigger("reset");
+           }
+           else
+           {
+                Swal.fire({
+                    type: 'error',
+                    text: 'Username or email already exists!!',
+                })
+                $("#submit_ac_button").removeClass('disabled');
+                $("#submit_ac_button").val("Sign Up");
+           }
+       }
+   });
+})
+</script>
+
+<script>
+  "use strict";
+  (function($) {
+
+    function scroll_to_class(element_class, removed_height) {
+      var scroll_to = $(element_class).offset().top - removed_height;
+      if ($(window).scrollTop() != scroll_to) {
+        $('.form-wizard').stop().animate({
+          scrollTop: scroll_to
+        }, 0);
+      }
+    }
+
+    function bar_progress(progress_line_object, direction) {
+      var number_of_steps = progress_line_object.data('number-of-steps');
+      var now_value = progress_line_object.data('now-value');
+      var new_value = 0;
+      if (direction == 'right') {
+        new_value = now_value + (100 / number_of_steps);
+      } else if (direction == 'left') {
+        new_value = now_value - (100 / number_of_steps);
+      }
+      progress_line_object.attr('style', 'width: ' + new_value + '%;').data('now-value', new_value);
+    }
+
+    jQuery(document).ready(function() {
+
+                /*
+                  Form
+                  */
+                  $('.form-wizard fieldset:first').fadeIn('slow');
+
+                  $('.form-wizard .required').on('focus', function() {
+                    $(this).removeClass('input-error');
+                  });
+
+                // next step
+                $('.form-wizard .btn-next').on('click', function() {
+                  var parent_fieldset = $(this).parents('fieldset');
+                  var next_step = true;
+                    // navigation steps / progress steps
+                    var current_active_step = $(this).parents('.form-wizard').find('.form-wizard-step.active');
+                    var progress_line = $(this).parents('.form-wizard').find('.form-wizard-progress-line');
+
+                    // fields validation
+                    parent_fieldset.find('.required').each(function() {
+                      if ($(this).val() == "") {
+                        $(this).addClass('input-error');
+                        next_step = false;
+                      } else {
+                        $(this).removeClass('input-error');
+                      }
+                    });
+                    // fields validation
+
+                    if (next_step) {
+                      parent_fieldset.fadeOut(400, function() {
+                            // change icons
+                            current_active_step.removeClass('active').addClass('activated').next().addClass('active');
+                            // progress bar
+                            bar_progress(progress_line, 'right');
+                            // show next step
+                            $(this).next().fadeIn();
+                            // scroll window to beginning of the form
+                            scroll_to_class($('.form-wizard'), 20);
+                          });
+                    }
+
+                  });
+
+                // previous step
+                $('.form-wizard .btn-previous').on('click', function() {
+                    // navigation steps / progress steps
+                    var current_active_step = $(this).parents('.form-wizard').find('.form-wizard-step.active');
+                    var progress_line = $(this).parents('.form-wizard').find('.form-wizard-progress-line');
+
+                    $(this).parents('fieldset').fadeOut(400, function() {
+                        // change icons
+                        current_active_step.removeClass('active').prev().removeClass('activated').addClass('active');
+                        // progress bar
+                        bar_progress(progress_line, 'left');
+                        // show previous step
+                        $(this).prev().fadeIn();
+                        // scroll window to beginning of the form
+                        scroll_to_class($('.form-wizard'), 20);
+                      });
+                  });
+
+                // submit
+                $('.form-wizard').on('submit', function(e) {
+
+                    // fields validation
+                    $(this).find('.required').each(function() {
+                      if ($(this).val() == "") {
+                        e.preventDefault();
+                        $(this).addClass('input-error');
+                      } else {
+                        $(this).removeClass('input-error');
+                      }
+                    });
+                    // fields validation
+
+                  });
+
+              });
+
+            // image uploader scripts
+
+            var $dropzone = $('.image_picker'),
+            $droptarget = $('.drop_target'),
+            $dropinput = $('#inputFile'),
+            $dropimg = $('.image_preview'),
+            $remover = $('[data-action="remove_current_image"]');
+
+            $dropzone.on('dragover', function() {
+              $droptarget.addClass('dropping');
+              return false;
+            });
+
+            $dropzone.on('dragend dragleave', function() {
+              $droptarget.removeClass('dropping');
+              return false;
+            });
+
+            $dropzone.on('drop', function(e) {
+              $droptarget.removeClass('dropping');
+              $droptarget.addClass('dropped');
+              $remover.removeClass('disabled');
+              e.preventDefault();
+
+              var file = e.originalEvent.dataTransfer.files[0],
+              reader = new FileReader();
+
+              reader.onload = function(event) {
+                $dropimg.css('background-image', 'url(' + event.target.result + ')');
+              };
+
+              console.log(file);
+              reader.readAsDataURL(file);
+
+              return false;
+            });
+
+            $dropinput.change(function(e) {
+              $droptarget.addClass('dropped');
+              $remover.removeClass('disabled');
+              $('.image_title input').val('');
+
+              var file = $dropinput.get(0).files[0],
+              reader = new FileReader();
+
+              reader.onload = function(event) {
+                $dropimg.css('background-image', 'url(' + event.target.result + ')');
+              }
+
+              reader.readAsDataURL(file);
+            });
+
+            $remover.on('click', function() {
+              $dropimg.css('background-image', '');
+              $droptarget.removeClass('dropped');
+              $remover.addClass('disabled');
+              $('.image_title input').val('');
+            });
+
+            $('.image_title input').blur(function() {
+              if ($(this).val() != '') {
+                $droptarget.removeClass('dropped');
+              }
+            });
+
+            // image uploader scripts
+
+          }(jQuery));
+        </script>
+
+
+        <script>
+         function readURL(input) {
+          if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+              $('#blah')
+              .attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+          }
+        }
+      </script>
+
+</body>
+</html>
